@@ -1,0 +1,89 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:id="@+id/coordinator_layout"
+    android:background="@null">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recycler_view"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_scrollFlags="scroll|enterAlways" />
+
+    </android.support.design.widget.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout"
+            android:layout_weight=".20"
+            android:layout_gravity="bottom|start"
+            app:elevation="6dp">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/card_view"
+                android:layout_marginEnd="72dp"
+                android:layout_marginRight="72dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/comment_edit_text_holder"
+                    android:id="@+id/commentEditText"
+                    android:background="@android:color/transparent"/>
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="end"
+                android:layout_marginEnd="72dp"
+                android:layout_marginRight="72dp"
+                android:id="@+id/characterCountTextView"/>
+
+        </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/FAB"
+                app:elevation="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_send_white_24dp"
+                app:rippleColor="@color/ColorPrimaryDark"
+                app:backgroundTint="@color/ColorPrimary"
+                app:pressedTranslationZ="12dp"
+                android:layout_margin="8dp"
+                app:layout_anchor="@+id/linearLayout"
+                app:layout_anchorGravity="center|right|end"/>
+
+</android.support.design.widget.CoordinatorLayout>

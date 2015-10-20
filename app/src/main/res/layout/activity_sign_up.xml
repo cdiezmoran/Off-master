@@ -1,0 +1,134 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context="com.offapps.off.UI.SignUpActivity"
+                android:background="#ff19263c">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="@string/logo_description"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_text"
+        android:id="@+id/welcomeTextView"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffffff"
+        android:textSize="18sp"
+        android:paddingTop="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/slogan_text"
+        android:id="@+id/sloganTextView"
+        android:layout_below="@+id/welcomeTextView"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="5dp"
+        android:textSize="18sp"
+        android:textColor="#ffffffff"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/emailField"
+        android:layout_below="@+id/sloganTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="@string/email_hint"
+        android:paddingTop="40dp"
+        android:textColor="#ffffffff"
+        android:textColorHint="#46ffffff"
+        android:textColorHighlight="#ffffffff"
+        android:textColorLink="#ffffffff"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordField"
+        android:layout_below="@+id/emailField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffffff"
+        android:hint="@string/password_hint"
+        android:textColorHint="#46ffffff"
+        android:textColorHighlight="#ffffffff"
+        android:textColorLink="#ffffffff"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up_button_label"
+        android:id="@+id/signUpButton"
+        android:layout_below="@+id/passwordField"
+        android:layout_centerHorizontal="true"
+        android:background="#FF2C2B"
+        android:textColor="#ffffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/account_label"
+        android:id="@+id/accountTextView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffffff"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_label"
+        android:id="@+id/loginTextView"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/accountTextView"
+        android:layout_toEndOf="@+id/accountTextView"
+        android:textColor="#4392d5"
+        android:textSize="15sp"
+        android:paddingLeft="5dp"
+        android:clickable="true"
+        android:paddingTop="10dp"/>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/twitterImageView"
+        android:layout_above="@+id/loginTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@mipmap/twit"
+        />
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/googleImageView"
+        android:layout_above="@+id/loginTextView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@mipmap/google" />
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/facebookImageView"
+        android:layout_above="@+id/loginTextView"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/face" />
+</RelativeLayout>

@@ -1,0 +1,38 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.offapps.off.UI.MallOffersActivity">
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          android:orderInCategory="10"
+          app:showAsAction="never"/>
+
+    <item android:id="@+id/action_logout"
+          android:title="@string/action_logout_title"
+          android:orderInCategory="20"
+          app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="40"
+        android:title="@string/action_search_title"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="always">
+
+    </item>
+    <item
+        android:id="@+id/action_mall"
+        android:orderInCategory="50"
+        android:title="@string/action_location_title"
+        android:icon="@drawable/ic_local_mall_white_24dp"
+        app:showAsAction="always">
+    </item>
+    <item
+        android:id="@+id/action_notifications"
+        android:orderInCategory="60"
+        android:title="@string/action_notifications_title"
+        android:icon="@drawable/ic_notifications_white_24dp"
+        app:showAsAction="always">
+
+    </item>
+</menu>

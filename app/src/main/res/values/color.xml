@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ColorPrimary">#FF1744</color>
+    <color name="ColorPrimaryDark">#D32F2F</color>
+    <color name="TabScrollColor">#FFC107</color>
+    <color name="TwitterColor">#4099FF</color>
+    <color name="FacebookColor">#3b5998</color>
+</resources>

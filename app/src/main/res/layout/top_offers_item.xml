@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:id="@+id/panel_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants">
+
+    <ImageView
+        android:id="@+id/dynamicImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dynamicImageView">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.60">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/offerTitleTextView"
+                android:textColor="#ff000000"
+                android:maxLines="1"
+                android:ems="3"
+                android:singleLine="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/storeNameTextView"
+                android:layout_gravity="center"
+                android:maxLines="1"
+                android:ems="3"
+                android:singleLine="true"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="24dp"
+            android:id="@+id/heartImageView"
+            android:layout_weight="0.40"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_favorite_border_black_24dp"/>
+    </LinearLayout>
+
+    <include layout="@layout/image_footer"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_alignBottom="@+id/dynamicImageView"/>
+
+</RelativeLayout>

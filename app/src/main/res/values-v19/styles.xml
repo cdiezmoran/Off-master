@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <style name="AppTheme2" parent="Theme.AppCompat.Light">
+
+                <item name="windowActionBar">false</item>
+                <item name="android:windowTranslucentStatus">true</item>
+                <item name="android:fitsSystemWindows">true</item>
+
+                <item name="colorPrimary">@color/ColorPrimary</item>
+                <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
+                <item name="colorAccent">#f77</item>
+
+        </style>
+</resources>

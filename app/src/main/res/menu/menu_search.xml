@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.offapps.off.UI.SearchActivity">
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+
+      <item android:id="@+id/search_view"
+          android:icon="@drawable/ic_search_white_24dp"
+          android:title="@string/search_menu"
+          android:orderInCategory="1"
+          app:actionViewClass="android.support.v7.widget.SearchView"
+          app:showAsAction="ifRoom"/>
+</menu>

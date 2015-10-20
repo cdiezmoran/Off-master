@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.offapps.off" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="com.parse.anywall.permission.MAPS_RECEIVE" />
+
+    <application
+        android:name=".Misc.OffApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBlsixfbw7jbDSzH41sF2HTq46BA1IzI0c" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".UI.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".UI.SignUpActivity"
+            android:label="@string/title_activity_sign_up"
+            android:theme="@style/BlankNotificationTheme" >
+        </activity>
+        <activity
+            android:name=".UI.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/BlankNotificationTheme" >
+        </activity>
+        <activity
+            android:name=".UI.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:parentActivityName=".UI.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.MainActivity" />
+        </activity>
+        <activity
+            android:name=".UI.MapActivity"
+            android:label="@string/title_activity_map" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.MainActivity" />
+        </activity>
+        <activity
+            android:name=".UI.AddOfferActivity"
+            android:label="@string/title_activity_temp_add" >
+        </activity>
+        <activity
+            android:name=".UI.OfferActivity"
+            android:label="@string/title_activity_show_item"
+            android:launchMode="singleTop" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.MainActivity" />
+        </activity>
+        <activity
+            android:name=".UI.MallOffersActivity"
+            android:label="@string/title_activity_mall_offers" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.MallActivity" />
+        </activity>
+        <activity
+            android:name=".UI.CommentsActivity"
+            android:label="@string/title_activity_comments"
+            android:parentActivityName=".UI.OfferActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.OfferActivity" />
+        </activity>
+        <activity
+            android:name=".UI.MallActivity"
+            android:label="@string/title_activity_mall" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.MapActivity" />
+        </activity>
+        <activity
+            android:name=".UI.MallMapsActivity"
+            android:label="@string/title_activity_mall" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.MallActivity" />
+        </activity>
+        <activity
+            android:name=".UI.StoreActivity"
+            android:label="@string/title_activity_store"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".UI.StoreOffersActivity"
+            android:label="@string/title_activity_store_offers"
+            android:parentActivityName=".UI.StoreActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.StoreActivity" />
+        </activity>
+    </application>
+
+</manifest>
