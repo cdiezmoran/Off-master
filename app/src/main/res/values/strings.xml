@@ -70,4 +70,5 @@
     <string name="offers_available_text">Offers Available</string>
     <string name="following_text">Following</string>
     <string name="top_offers_title">Top Offers</string>
+    <string name="title_activity_search_results">Results</string>
 </resources>

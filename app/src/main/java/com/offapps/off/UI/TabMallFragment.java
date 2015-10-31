@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.offapps.off.Adapters.StoreRecyclerGridAdapter;
 import com.offapps.off.Data.Floor;
 import com.offapps.off.Data.Mall_Store;
@@ -23,6 +24,7 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ public class TabMallFragment extends Fragment implements MyButtonClickListener {
 
     private MyButtonClickListener mMyButtonClickListener;
     private StoreRecyclerGridAdapter mAdapter;
+
+    private CircularProgressView mCircularProgressView;
 
     private Boolean mIsFirstTime;
 
@@ -72,6 +76,8 @@ public class TabMallFragment extends Fragment implements MyButtonClickListener {
 
         mMapImageView = (ImageView) view.findViewById(R.id.mapImageView);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.storeGridView);
+
+        mCircularProgressView = (CircularProgressView) view.findViewById(R.id.progress_view);
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -129,7 +135,21 @@ public class TabMallFragment extends Fragment implements MyButtonClickListener {
     @Override
     public void buttonInRecyclerClicked(int position) {
         if (!mIsFirstTime) {
-            Picasso.with(getActivity()).load(mImageStringList.get(position)).into(mMapImageView);
+            mCircularProgressView.setVisibility(View.VISIBLE);
+            mCircularProgressView.startAnimation();
+            mMapImageView.setVisibility(View.GONE);
+            Picasso.with(getActivity()).load(mImageStringList.get(position)).into(mMapImageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    mCircularProgressView.setVisibility(View.GONE);
+                    mMapImageView.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onError() {
+                    //show error dialog
+                }
+            });
         }
         else {
             mMyButtonClickListener = this;

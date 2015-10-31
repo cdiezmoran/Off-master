@@ -24,6 +24,7 @@ import com.offapps.off.Data.Mall;
 import com.offapps.off.Data.Offer;
 import com.offapps.off.Misc.ExpandableHeightRecyclerView;
 import com.offapps.off.Misc.ParseConstants;
+import com.offapps.off.Misc.WrappingStaggeredGridLayoutManager;
 import com.offapps.off.R;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -50,7 +51,7 @@ public class MallActivity extends AppCompatActivity {
     @InjectView(R.id.webPageTextView) TextView mWebPageTextView;
     @InjectView(R.id.nameTextView) TextView mNameTextView;
     @InjectView(R.id.tool_bar) Toolbar mToolbar;
-    @InjectView(R.id.recycler_view) ExpandableHeightRecyclerView mRecyclerView;
+    @InjectView(R.id.recycler_view) RecyclerView mRecyclerView;
 
     private String mMallId;
     private Mall mMall;
@@ -68,12 +69,12 @@ public class MallActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(false);
 
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        WrappingStaggeredGridLayoutManager layoutManager = new WrappingStaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setExpanded(true);
+        mRecyclerView.setNestedScrollingEnabled(false);
 
         Intent intent = getIntent();
         mMallId = intent.getStringExtra(ParseConstants.KEY_OBJECT_ID);

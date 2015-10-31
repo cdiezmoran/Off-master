@@ -7,16 +7,31 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:id="@+id/innerScrollView">
 
-            <ImageView
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:id="@+id/mapImageView"
-                android:contentDescription="@string/map_image_description"/>
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:id="@+id/mapImageView"
+                    android:contentDescription="@string/map_image_description"/>
+
+                <com.github.rahatarmanahmed.cpv.CircularProgressView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/progress_view"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:cpv_indeterminate="true"
+                    app:cpv_color="@color/ColorPrimary"
+                    android:layout_gravity="center"/>
+
+            </FrameLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

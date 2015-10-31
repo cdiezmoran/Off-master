@@ -14,7 +14,18 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.offapps.off.Adapters.CategoriesListAdapter;
+import com.offapps.off.Data.Mall;
+import com.offapps.off.Data.Offer;
+import com.offapps.off.Data.Store;
+import com.offapps.off.Misc.ParseConstants;
 import com.offapps.off.R;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -70,6 +81,12 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mSearchView.clearFocus();
+
+                String[] tagsArr = query.split(" ");
+                List<String> tags = Arrays.asList(tagsArr);
+
+                doOfferQuery(tags);
+
                 return false;
             }
 
@@ -80,5 +97,47 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    private void doOfferQuery(final List<String> tags) {
+        ParseQuery<Offer> offerQuery = Offer.getQuery();
+        offerQuery.whereContainsAll(ParseConstants.KEY_TAGS, tags);
+        offerQuery.setLimit(2);
+        offerQuery.findInBackground(new FindCallback<Offer>() {
+            @Override
+            public void done(List<Offer> offers, ParseException e) {
+                if (e == null) {
+                    doStoreQuery(tags, offers);
+                }
+            }
+        });
+    }
+
+    private void doStoreQuery(final List<String> tags, final List<Offer> offers){
+        ParseQuery<Store> storeQuery = Store.getQuery();
+        storeQuery.whereContainsAll(ParseConstants.KEY_TAGS, tags);
+        storeQuery.setLimit(2);
+        storeQuery.findInBackground(new FindCallback<Store>() {
+            @Override
+            public void done(List<Store> stores, ParseException e) {
+                if (e == null) {
+                    doMallQuery(tags, offers, stores);
+                }
+            }
+        });
+    }
+
+    private void doMallQuery(final List<String> tags, final List<Offer> offers, final List<Store> stores) {
+        ParseQuery<Mall> mallQuery = Mall.getQuery();
+        mallQuery.whereContainsAll(ParseConstants.KEY_TAGS, tags);
+        mallQuery.setLimit(2);
+        mallQuery.findInBackground(new FindCallback<Mall>() {
+            @Override
+            public void done(List<Mall> malls, ParseException e) {
+                if (e == null) {
+
+                }
+            }
+        });
     }
 }

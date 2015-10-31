@@ -24,4 +24,9 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
+    <include
+        android:id="@+id/results_view"
+        layout="@layout/search_results">
+    </include>
+
 </RelativeLayout>
