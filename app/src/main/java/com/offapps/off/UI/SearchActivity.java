@@ -2,6 +2,7 @@ package com.offapps.off.UI;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +12,16 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.offapps.off.Adapters.CategoriesListAdapter;
+import com.offapps.off.Adapters.MallSearchAdapter;
+import com.offapps.off.Adapters.OfferSearchAdapter;
+import com.offapps.off.Adapters.StoreSearchAdapter;
 import com.offapps.off.Data.Mall;
 import com.offapps.off.Data.Offer;
 import com.offapps.off.Data.Store;
@@ -24,18 +32,26 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class SearchActivity extends AppCompatActivity {
 
+    @InjectView(android.R.id.list) ListView mListView;
+    @InjectView(R.id.resultsLinearLayout) LinearLayout mResultsLinearLayout;
+    @InjectView(R.id.offer_recycler_view) RecyclerView mOffersRecyclerView;
+    @InjectView(R.id.store_recycler_view) RecyclerView mStoresRecyclerView;
+    @InjectView(R.id.mall_recycler_view) RecyclerView mMallRecyclerView;
+    @InjectView(R.id.progress_view) CircularProgressView mCircularProgressView;
+
     private Toolbar mToolbar;
     private SearchView mSearchView;
-
-    @InjectView(android.R.id.list) ListView mListView;
+    private List<String> mTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +62,30 @@ public class SearchActivity extends AppCompatActivity {
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(mToolbar);
 
+        initializeRecyclerViews();
+
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_36dp);
 
         String[] categoriesList = {"Hombres", "Mujeres", "Camisas", "Zapatos", "Vestidos", "Niños",
-                "Bebes", "Popular", "Trending"};
+                "Popular", "Trending"};
 
         CategoriesListAdapter adapter = new CategoriesListAdapter(this, categoriesList);
         mListView.setEmptyView(findViewById(android.R.id.empty));
         mListView.setAdapter(adapter);
+    }
+
+    private void initializeRecyclerViews() {
+        mOffersRecyclerView.setHasFixedSize(true);
+        mOffersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mStoresRecyclerView.setHasFixedSize(true);
+        mStoresRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mMallRecyclerView.setHasFixedSize(true);
+        mMallRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -83,11 +112,15 @@ public class SearchActivity extends AppCompatActivity {
                 mSearchView.clearFocus();
 
                 String[] tagsArr = query.split(" ");
-                List<String> tags = Arrays.asList(tagsArr);
+                mTags = Arrays.asList(tagsArr);
 
-                doOfferQuery(tags);
+                mListView.setVisibility(View.GONE);
+                mCircularProgressView.setVisibility(View.VISIBLE);
+                mCircularProgressView.startAnimation();
 
-                return false;
+                doOfferQuery();
+
+                return true;
             }
 
             @Override
@@ -99,45 +132,78 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
-    private void doOfferQuery(final List<String> tags) {
+    private void doOfferQuery() {
         ParseQuery<Offer> offerQuery = Offer.getQuery();
-        offerQuery.whereContainsAll(ParseConstants.KEY_TAGS, tags);
+        offerQuery.whereContainsAll(ParseConstants.KEY_TAGS, mTags);
         offerQuery.setLimit(2);
         offerQuery.findInBackground(new FindCallback<Offer>() {
             @Override
             public void done(List<Offer> offers, ParseException e) {
                 if (e == null) {
-                    doStoreQuery(tags, offers);
+                    doStoreQuery(offers);
                 }
             }
         });
     }
 
-    private void doStoreQuery(final List<String> tags, final List<Offer> offers){
+    private void doStoreQuery(final List<Offer> offers){
         ParseQuery<Store> storeQuery = Store.getQuery();
-        storeQuery.whereContainsAll(ParseConstants.KEY_TAGS, tags);
+        storeQuery.whereContainsAll(ParseConstants.KEY_TAGS, mTags);
         storeQuery.setLimit(2);
         storeQuery.findInBackground(new FindCallback<Store>() {
             @Override
             public void done(List<Store> stores, ParseException e) {
                 if (e == null) {
-                    doMallQuery(tags, offers, stores);
+                    doMallQuery(offers, stores);
                 }
             }
         });
     }
 
-    private void doMallQuery(final List<String> tags, final List<Offer> offers, final List<Store> stores) {
+    private void doMallQuery(final List<Offer> offers, final List<Store> stores) {
         ParseQuery<Mall> mallQuery = Mall.getQuery();
-        mallQuery.whereContainsAll(ParseConstants.KEY_TAGS, tags);
+        mallQuery.whereContainsAll(ParseConstants.KEY_TAGS, mTags);
         mallQuery.setLimit(2);
         mallQuery.findInBackground(new FindCallback<Mall>() {
             @Override
             public void done(List<Mall> malls, ParseException e) {
                 if (e == null) {
+                    OfferSearchAdapter offerAdapter = new OfferSearchAdapter(SearchActivity.this, offers);
+                    StoreSearchAdapter storeAdapter = new StoreSearchAdapter(SearchActivity.this, stores);
+                    MallSearchAdapter mallAdapter = new MallSearchAdapter(SearchActivity.this, malls);
 
+                    mOffersRecyclerView.setAdapter(offerAdapter);
+                    mStoresRecyclerView.setAdapter(storeAdapter);
+                    mMallRecyclerView.setAdapter(mallAdapter);
+
+                    mCircularProgressView.setVisibility(View.GONE);
+                    mResultsLinearLayout.setVisibility(View.VISIBLE);
                 }
             }
         });
+    }
+
+    @OnClick(R.id.offersLinearLayout)
+    public void onOffersLinearLayoutClick(){
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+        intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, (ArrayList<String>) mTags);
+        intent.putExtra("extra", "offers");
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.storesLinearLayout)
+    public void onStoresLinearLayoutClick() {
+        Intent intent =  new Intent(this, SearchResultsActivity.class);
+        intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, (ArrayList<String>) mTags);
+        intent.putExtra("extra", "stores");
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.mallsTextView)
+    public void onMallsLinearLayoutClick(){
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+        intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, (ArrayList<String>) mTags);
+        intent.putExtra("extra", "malls");
+        startActivity(intent);
     }
 }

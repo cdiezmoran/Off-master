@@ -111,6 +111,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.offapps.off.UI.StoreActivity" />
         </activity>
+        <activity
+            android:name=".UI.SearchResultsActivity"
+            android:label="@string/title_activity_search_results"
+            android:parentActivityName=".UI.SearchActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.SearchActivity" />
+        </activity>
     </application>
 
 </manifest>

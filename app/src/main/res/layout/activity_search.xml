@@ -16,17 +16,22 @@
         android:id="@android:id/list"
         android:layout_below="@+id/tool_bar"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@android:id/empty"
-        android:text="@string/empty_grid_text"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/progress_view"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        app:cpv_indeterminate="true"
+        app:cpv_color="@color/ColorPrimary"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
     <include
         android:id="@+id/results_view"
-        layout="@layout/search_results">
+        layout="@layout/search_results"
+        android:layout_below="@+id/tool_bar"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
     </include>
 
 </RelativeLayout>
