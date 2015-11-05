@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@android:id/list"
-        android:layout_below="@+id/tool_bar"/>
+        android:layout_below="@+id/tool_bar"
+        android:visibility="visible"/>
 
     <com.github.rahatarmanahmed.cpv.CircularProgressView
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,12 +27,136 @@
         android:layout_centerInParent="true"
         android:visibility="gone"/>
 
-    <include
-        android:id="@+id/results_view"
-        layout="@layout/search_results"
-        android:layout_below="@+id/tool_bar"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
-    </include>
+        android:id="@+id/scrollView"
+        android:visibility="gone"
+        android:layout_below="@+id/tool_bar"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:id="@+id/offersLinearLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/offersTextView"
+                    android:layout_gravity="start"
+                    android:text="Offers"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|end"
+                    android:text="MORE"
+                    android:textColor="@color/ColorPrimary"
+                    android:layout_weight="1"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:id="@+id/offer_recycler_view"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:id="@+id/storesLinearLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/storesTextView"
+                    android:layout_gravity="start"
+                    android:text="Stores"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|end"
+                    android:text="MORE"
+                    android:textColor="@color/ColorPrimary"
+                    android:layout_weight="1"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:id="@+id/store_recycler_view"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:id="@+id/mallsLinearLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/mallsTextView"
+                    android:layout_gravity="start"
+                    android:text="Malls"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|end"
+                    android:text="MORE"
+                    android:textColor="@color/ColorPrimary"
+                    android:layout_weight="1"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:id="@+id/mall_recycler_view"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </RelativeLayout>

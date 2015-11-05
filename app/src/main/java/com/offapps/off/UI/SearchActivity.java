@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -25,7 +26,9 @@ import com.offapps.off.Adapters.StoreSearchAdapter;
 import com.offapps.off.Data.Mall;
 import com.offapps.off.Data.Offer;
 import com.offapps.off.Data.Store;
+import com.offapps.off.Misc.ExpandableHeightRecyclerView;
 import com.offapps.off.Misc.ParseConstants;
+import com.offapps.off.Misc.WrappingLinearLayoutManager;
 import com.offapps.off.R;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -43,7 +46,7 @@ import butterknife.OnClick;
 public class SearchActivity extends AppCompatActivity {
 
     @InjectView(android.R.id.list) ListView mListView;
-    @InjectView(R.id.resultsLinearLayout) LinearLayout mResultsLinearLayout;
+    @InjectView(R.id.scrollView) ScrollView mScrollView;
     @InjectView(R.id.offer_recycler_view) RecyclerView mOffersRecyclerView;
     @InjectView(R.id.store_recycler_view) RecyclerView mStoresRecyclerView;
     @InjectView(R.id.mall_recycler_view) RecyclerView mMallRecyclerView;
@@ -78,12 +81,15 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void initializeRecyclerViews() {
+        mOffersRecyclerView.setNestedScrollingEnabled(false);
         mOffersRecyclerView.setHasFixedSize(true);
         mOffersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        mStoresRecyclerView.setNestedScrollingEnabled(false);
         mStoresRecyclerView.setHasFixedSize(true);
         mStoresRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        mMallRecyclerView.setNestedScrollingEnabled(false);
         mMallRecyclerView.setHasFixedSize(true);
         mMallRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -177,7 +183,7 @@ public class SearchActivity extends AppCompatActivity {
                     mMallRecyclerView.setAdapter(mallAdapter);
 
                     mCircularProgressView.setVisibility(View.GONE);
-                    mResultsLinearLayout.setVisibility(View.VISIBLE);
+                    mScrollView.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -186,7 +192,7 @@ public class SearchActivity extends AppCompatActivity {
     @OnClick(R.id.offersLinearLayout)
     public void onOffersLinearLayoutClick(){
         Intent intent = new Intent(this, SearchResultsActivity.class);
-        intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, (ArrayList<String>) mTags);
+        intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, new ArrayList<>(mTags));
         intent.putExtra("extra", "offers");
         startActivity(intent);
     }
@@ -194,7 +200,7 @@ public class SearchActivity extends AppCompatActivity {
     @OnClick(R.id.storesLinearLayout)
     public void onStoresLinearLayoutClick() {
         Intent intent =  new Intent(this, SearchResultsActivity.class);
-        intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, (ArrayList<String>) mTags);
+        intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, new ArrayList<>(mTags));
         intent.putExtra("extra", "stores");
         startActivity(intent);
     }
@@ -202,7 +208,7 @@ public class SearchActivity extends AppCompatActivity {
     @OnClick(R.id.mallsTextView)
     public void onMallsLinearLayoutClick(){
         Intent intent = new Intent(this, SearchResultsActivity.class);
-        intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, (ArrayList<String>) mTags);
+        intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, new ArrayList<>(mTags));
         intent.putExtra("extra", "malls");
         startActivity(intent);
     }

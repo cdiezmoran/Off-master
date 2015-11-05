@@ -24,6 +24,7 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class SearchResultsActivity extends AppCompatActivity {
@@ -37,6 +38,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
+        ButterKnife.inject(this);
 
         setSupportActionBar(mToolbar);
 
