@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.offapps.off.Adapters.MallSearchAdapter;
@@ -22,6 +25,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -56,15 +60,33 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         switch (extra) {
             case "offers":
+                OfferActivity.parents.push(getClass());
                 doOffersQuery();
                 break;
             case "stores":
+                StoreActivity.parents.push(getClass());
                 doStoresQuery();
                 break;
             case "malls":
+                MallActivity.parents.push(getClass());
                 doMallsQuery();
                 break;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, new ArrayList<>(mTags));
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void doOffersQuery() {
@@ -75,7 +97,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void done(List<Offer> offers, ParseException e) {
                 if (e == null) {
                     mToolbar.setTitle("Offers");
-                    OfferSearchAdapter adapter = new OfferSearchAdapter(SearchResultsActivity.this, offers);
+                    OfferSearchAdapter adapter = new OfferSearchAdapter(SearchResultsActivity.this, offers, mTags);
                     mRecyclerView.setAdapter(adapter);
                 }
             }
@@ -90,7 +112,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void done(List<Store> stores, ParseException e) {
                 if (e == null){
                     mToolbar.setTitle("Stores");
-                    StoreSearchAdapter adapter = new StoreSearchAdapter(SearchResultsActivity.this, stores);
+                    StoreSearchAdapter adapter = new StoreSearchAdapter(SearchResultsActivity.this, stores, mTags);
                     mRecyclerView.setAdapter(adapter);
                 }
             }
@@ -105,7 +127,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void done(List<Mall> malls, ParseException e) {
                 if (e == null) {
                     mToolbar.setTitle("Malls");
-                    MallSearchAdapter adapter = new MallSearchAdapter(SearchResultsActivity.this, malls);
+                    MallSearchAdapter adapter = new MallSearchAdapter(SearchResultsActivity.this, malls, mTags);
                     mRecyclerView.setAdapter(adapter);
                 }
             }

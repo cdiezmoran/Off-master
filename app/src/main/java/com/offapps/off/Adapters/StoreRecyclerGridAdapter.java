@@ -23,18 +23,21 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by carlosdiez on 10/1/15.
+ * Created by Carlos Diez on 10/1/15.
+ * StoreRecyclerGridAdapter
  */
 public class StoreRecyclerGridAdapter extends RecyclerView.Adapter<StoreRecyclerGridAdapter.StoreViewHolder> {
 
     private Context mContext;
     private List<Store> mStores;
     private MyButtonClickListener mItemListener;
+    private String mMallId;
 
-    public StoreRecyclerGridAdapter(Context context, List<Store> stores, MyButtonClickListener itemListener) {
+    public StoreRecyclerGridAdapter(Context context, List<Store> stores, MyButtonClickListener itemListener, String mallId) {
         mContext = context;
         mStores = stores;
         mItemListener = itemListener;
+        mMallId = mallId;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class StoreRecyclerGridAdapter extends RecyclerView.Adapter<StoreRecycler
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), StoreActivity.class);
                 intent.putExtra(ParseConstants.KEY_OBJECT_ID, store.getObjectId());
+                intent.putExtra("mallId", mMallId);
                 v.getContext().startActivity(intent);
             }
         });

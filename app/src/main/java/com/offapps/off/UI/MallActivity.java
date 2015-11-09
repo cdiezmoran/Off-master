@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +23,6 @@ import com.offapps.off.Adapters.OfferAdapter;
 import com.offapps.off.Data.Like;
 import com.offapps.off.Data.Mall;
 import com.offapps.off.Data.Offer;
-import com.offapps.off.Misc.ExpandableHeightRecyclerView;
 import com.offapps.off.Misc.ParseConstants;
 import com.offapps.off.Misc.WrappingStaggeredGridLayoutManager;
 import com.offapps.off.R;
@@ -35,6 +35,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -52,6 +53,11 @@ public class MallActivity extends AppCompatActivity {
     @InjectView(R.id.nameTextView) TextView mNameTextView;
     @InjectView(R.id.tool_bar) Toolbar mToolbar;
     @InjectView(R.id.recycler_view) RecyclerView mRecyclerView;
+    @InjectView(R.id.nested_scroll) NestedScrollView mNestedScrollView;
+
+    public static Stack<Class<?>> parents = new Stack<>();
+    private Class<?> mParentClass;
+    private ArrayList<String> mTags;
 
     private String mMallId;
     private Mall mMall;
@@ -62,6 +68,7 @@ public class MallActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mall);
         ButterKnife.inject(this);
+        OffersActivity.parents.push(getClass());
 
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_36dp);
@@ -69,15 +76,21 @@ public class MallActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(false);
 
         WrappingStaggeredGridLayoutManager layoutManager = new WrappingStaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
 
         Intent intent = getIntent();
         mMallId = intent.getStringExtra(ParseConstants.KEY_OBJECT_ID);
+
+        if (!parents.empty()) {
+            mParentClass = parents.pop();
+            if (mParentClass == SearchResultsActivity.class) {
+                mTags = intent.getStringArrayListExtra(ParseConstants.KEY_TAGS);
+            }
+        }
 
         getMall();
     }
@@ -117,9 +130,11 @@ public class MallActivity extends AppCompatActivity {
         query.getFirstInBackground(new GetCallback<Mall>() {
             @Override
             public void done(Mall mall, ParseException e) {
-                mMall = mall;
-                setData();
-                doTopOffersQuery();
+                if (e == null) {
+                    mMall = mall;
+                    setData();
+                    doTopOffersQuery();
+                }
             }
         });
     }
@@ -184,7 +199,15 @@ public class MallActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
+            if (mParentClass == SearchActivity.class){
+                Intent intent = new Intent(this, mParentClass);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, mTags);
+                startActivity(intent);
+            }
+            else {
+                NavUtils.navigateUpFromSameTask(this);
+            }
             return true;
         }
 
@@ -193,7 +216,7 @@ public class MallActivity extends AppCompatActivity {
 
     @OnClick(R.id.offersTextView)
     public void onClickOffers() {
-        Intent intent = new Intent(this, MallOffersActivity.class);
+        Intent intent = new Intent(this, OffersActivity.class);
         intent.putExtra(ParseConstants.KEY_OBJECT_ID, mMallId);
         startActivity(intent);
     }

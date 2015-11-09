@@ -41,6 +41,7 @@ public class MallMapsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mall_maps);
         ButterKnife.inject(this);
+        StoreActivity.parents.push(getClass());
 
         setSupportActionBar(mToolbar);
 
@@ -79,7 +80,7 @@ public class MallMapsActivity extends AppCompatActivity {
                     Floor floor;
                     for (int i = 0; i < mFloors; i++) {
                         floor = floorList.get(i);
-                        adapter.addFrag(TabMallFragment.newInstance(floor.getObjectId(), floor.getImageString())
+                        adapter.addFrag(TabMallFragment.newInstance(floor.getObjectId(), floor.getImageString(), mall.getObjectId())
                                 , floor.getName());
                     }
                     mViewPager.setAdapter(adapter);

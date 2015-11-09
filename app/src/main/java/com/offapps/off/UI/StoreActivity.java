@@ -5,9 +5,11 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +29,9 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -45,15 +50,23 @@ public class StoreActivity extends AppCompatActivity {
     @InjectView(R.id.followTextView) TextView mFollowTextView;
     @InjectView(R.id.tool_bar) Toolbar mToolbar;
 
+    public static Stack<Class<?>> parents = new Stack<>();
+
     private String mStoreId;
     private Store mStore;
     private Follow mFollow;
+
+    private ArrayList<String> mTags;
+    private Class<?> mParentClass;
+    private String mOfferId;
+    private String mMallId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
         ButterKnife.inject(this);
+        OffersActivity.parents.push(getClass());
 
         setCompoundDrawables();
 
@@ -66,6 +79,19 @@ public class StoreActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mStoreId = intent.getStringExtra(ParseConstants.KEY_OBJECT_ID);
 
+        if (!parents.empty()) {
+            mParentClass = parents.pop();
+            if (mParentClass == SearchResultsActivity.class || mParentClass == SearchActivity.class) {
+                mTags = intent.getStringArrayListExtra(ParseConstants.KEY_TAGS);
+            }
+            else if (mParentClass == OfferActivity.class) {
+                mOfferId = intent.getStringExtra("offerId");
+            }
+            else if (mParentClass == MallMapsActivity.class) {
+                mMallId = intent.getStringExtra("mallId");
+            }
+        }
+
         getStore();
     }
 
@@ -74,6 +100,38 @@ public class StoreActivity extends AppCompatActivity {
         super.onResume();
 
         setCompoundDrawables();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            if (mParentClass == SearchResultsActivity.class || mParentClass == SearchActivity.class) {
+                Intent intent = new Intent(this, mParentClass);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, mTags);
+                intent.putExtra("extra", "stores");
+                startActivity(intent);
+            }
+            else if (mParentClass == OfferActivity.class) {
+                Intent intent = new Intent(this, mParentClass);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(ParseConstants.KEY_OBJECT_ID, mOfferId);
+                startActivity(intent);
+            }
+            else if (mParentClass == MallMapsActivity.class) {
+                Intent intent = new Intent(this, mParentClass);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(ParseConstants.KEY_OBJECT_ID, mMallId);
+                startActivity(intent);
+            }
+            else{
+                NavUtils.navigateUpFromSameTask(this);
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void setCompoundDrawables(){
@@ -181,7 +239,7 @@ public class StoreActivity extends AppCompatActivity {
 
     @OnClick(R.id.offersTextView)
     public void onOffersClick(){
-        Intent intent = new Intent(this, StoreOffersActivity.class);
+        Intent intent = new Intent(this, OffersActivity.class);
         intent.putExtra(ParseConstants.KEY_OBJECT_ID, mStoreId);
         startActivity(intent);
     }

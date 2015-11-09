@@ -2,12 +2,9 @@ package com.offapps.off.UI;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -42,6 +39,7 @@ import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
@@ -77,6 +75,10 @@ public class OfferActivity extends AppCompatActivity {
     private String mMallObjectId;
     private Offer mOffer;
     private Like mLike;
+    private ArrayList<String> mTags;
+
+    private String mOfferId;
+    private String mStoreId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,16 +95,19 @@ public class OfferActivity extends AppCompatActivity {
         mCircularProgressView.startAnimation();
 
         Intent intent = getIntent();
-        String offerId = intent.getStringExtra(ParseConstants.KEY_OBJECT_ID);
+        mOfferId = intent.getStringExtra(ParseConstants.KEY_OBJECT_ID);
 
         if (!parents.empty()) {
             mParentClass = parents.pop();
-            if (mParentClass == MallOffersActivity.class) {
+            if (mParentClass == OffersActivity.class) {
                 mMallObjectId = intent.getStringExtra("extra");
+            }
+            else if (mParentClass == SearchResultsActivity.class || mParentClass == SearchActivity.class) {
+                mTags = intent.getStringArrayListExtra(ParseConstants.KEY_TAGS);
             }
         }
 
-        doOfferQuery(offerId);
+        doOfferQuery();
 
         mCommentEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -138,10 +143,10 @@ public class OfferActivity extends AppCompatActivity {
         mCommentEditText.setEnabled(true);
     }
 
-    private void doOfferQuery(String offerId) {
+    private void doOfferQuery() {
         ParseQuery<Offer> query = Offer.getQuery();
         //query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, offerId);
+        query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, mOfferId);
         query.getFirstInBackground(new GetCallback<Offer>() {
             @Override
             public void done(Offer offer, ParseException e) {
@@ -156,6 +161,7 @@ public class OfferActivity extends AppCompatActivity {
                 try {
                     Store store = mOffer.getParseObject(ParseConstants.KEY_STORE).fetchIfNeeded();
                     mStoreNameTextView.setText(store.getString(ParseConstants.KEY_NAME));
+                    mStoreId = store.getObjectId();
                     Picasso.with(OfferActivity.this).load(store.getImageString()).into(mStoreImageView);
                 } catch (ParseException e1) {
                     //Alert dialogue
@@ -230,12 +236,26 @@ public class OfferActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            if (mParentClass == MallOffersActivity.class) {
+            if (mParentClass == OffersActivity.class) {
                 Intent parentActivityIntent = new Intent(this, mParentClass);
                 parentActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 parentActivityIntent.putExtra(ParseConstants.KEY_OBJECT_ID, mMallObjectId);
                 startActivity(parentActivityIntent);
-            } else{
+            }
+            else if (mParentClass == SearchResultsActivity.class) {
+                Intent intent =  new Intent(this, mParentClass);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("extra", "offers");
+                intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, mTags);
+                startActivity(intent);
+            }
+            else if (mParentClass == SearchActivity.class) {
+                Intent intent = new Intent(this, mParentClass);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, mTags);
+                startActivity(intent);
+            }
+            else{
                 NavUtils.navigateUpFromSameTask(this);
             }
         }
@@ -346,5 +366,13 @@ public class OfferActivity extends AppCompatActivity {
     private void setLikeCountTextView(int likeCount){
         String likeText = "Likes: " + likeCount;
         mLikeCountTextView.setText(likeText);
+    }
+
+    @OnClick(R.id.storeImageView)
+    public void onClickStoreImageView() {
+        Intent intent = new Intent(this, StoreActivity.class);
+        intent.putExtra(ParseConstants.KEY_OBJECT_ID, mStoreId);
+        intent.putExtra("offerId", mOfferId);
+        startActivity(intent);
     }
 }

@@ -69,7 +69,7 @@
                 android:value="com.offapps.off.UI.MainActivity" />
         </activity>
         <activity
-            android:name=".UI.MallOffersActivity"
+            android:name=".UI.OffersActivity"
             android:label="@string/title_activity_mall_offers" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -101,15 +101,9 @@
             android:name=".UI.StoreActivity"
             android:label="@string/title_activity_store"
             android:theme="@style/AppTheme" >
-        </activity>
-        <activity
-            android:name=".UI.StoreOffersActivity"
-            android:label="@string/title_activity_store_offers"
-            android:parentActivityName=".UI.StoreActivity"
-            android:theme="@style/AppTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.StoreActivity" />
+                android:value="com.offapps.off.UI.MallMapsActivity" />
         </activity>
         <activity
             android:name=".UI.SearchResultsActivity"

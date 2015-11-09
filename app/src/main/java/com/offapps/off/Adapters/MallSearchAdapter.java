@@ -1,6 +1,7 @@
 package com.offapps.off.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,19 +10,24 @@ import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.offapps.off.Data.Mall;
+import com.offapps.off.Misc.ParseConstants;
 import com.offapps.off.R;
+import com.offapps.off.UI.MallActivity;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MallSearchAdapter extends RecyclerView.Adapter<MallSearchAdapter.MallViewHolder> {
 
     private Context mContext;
     private List<Mall> mMalls;
+    private List<String> mTags;
 
-    public MallSearchAdapter(Context context, List<Mall> malls) {
+    public MallSearchAdapter(Context context, List<Mall> malls, List<String> tags) {
         mContext = context;
         mMalls = malls;
+        mTags = tags;
     }
 
     @Override
@@ -33,8 +39,18 @@ public class MallSearchAdapter extends RecyclerView.Adapter<MallSearchAdapter.Ma
 
     @Override
     public void onBindViewHolder(MallSearchAdapter.MallViewHolder holder, int position) {
-        Mall mall = mMalls.get(position);
+        final Mall mall = mMalls.get(position);
         holder.bindMall(mall);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MallActivity.class);
+                intent.putExtra(ParseConstants.KEY_OBJECT_ID, mall.getObjectId());
+                intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, new ArrayList<>(mTags));
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override

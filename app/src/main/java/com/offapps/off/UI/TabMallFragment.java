@@ -32,11 +32,13 @@ import java.util.List;
 
 /**
  * Created by carlosdiez on 9/24/15.
+ *
  */
 public class TabMallFragment extends Fragment implements MyButtonClickListener {
 
     private String mFloorId;
     private String mImageString;
+    private String mMallId;
     private List<Store> mStores;
     private List<String> mImageStringList;
 
@@ -50,12 +52,13 @@ public class TabMallFragment extends Fragment implements MyButtonClickListener {
 
     private Boolean mIsFirstTime;
 
-    public static TabMallFragment newInstance(String floorId, String imageString){
+    public static TabMallFragment newInstance(String floorId, String imageString, String mallId){
         TabMallFragment fragment = new TabMallFragment();
 
-        Bundle args = new Bundle(2);
+        Bundle args = new Bundle(3);
         args.putString(ParseConstants.KEY_OBJECT_ID, floorId);
         args.putString("imageString", imageString);
+        args.putString("mallId", mallId);
         fragment.setArguments(args);
 
         return fragment;
@@ -67,6 +70,7 @@ public class TabMallFragment extends Fragment implements MyButtonClickListener {
 
         mFloorId = getArguments().getString(ParseConstants.KEY_OBJECT_ID);
         mImageString = getArguments().getString("imageString");
+        mMallId = getArguments().getString("mallId");
     }
 
     @Nullable
@@ -125,7 +129,7 @@ public class TabMallFragment extends Fragment implements MyButtonClickListener {
                             }
                         }
                     }
-                    mAdapter = new StoreRecyclerGridAdapter(getActivity(), mStores, mMyButtonClickListener);
+                    mAdapter = new StoreRecyclerGridAdapter(getActivity(), mStores, mMyButtonClickListener, mMallId);
                     mRecyclerView.setAdapter(mAdapter);
                 }
             }

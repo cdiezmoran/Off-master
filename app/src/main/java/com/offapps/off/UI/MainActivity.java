@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(id == R.id.action_search){
             Intent intent = new Intent(this, SearchActivity.class);
+            intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, null);
             startActivity(intent);
         }
         else if(id == R.id.action_add){

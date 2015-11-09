@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  * Created by carlosdiez on 9/27/15.
+ *
  */
 public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHolder>{
 
@@ -188,6 +189,9 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
             String percentageString;
             if (toPercentage == 0) {
                 percentageString = fromPercentage + "%" + " Off";
+            }
+            else if (fromPercentage == 0) {
+                percentageString = "Up to " + toPercentage + "%" + "Off";
             }
             else {
                 percentageString = fromPercentage + "-" + toPercentage + "%" + " Off";

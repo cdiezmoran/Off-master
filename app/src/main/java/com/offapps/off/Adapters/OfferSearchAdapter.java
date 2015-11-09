@@ -1,6 +1,7 @@
 package com.offapps.off.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,20 +12,24 @@ import android.widget.TextView;
 import com.offapps.off.Data.Offer;
 import com.offapps.off.Misc.ParseConstants;
 import com.offapps.off.R;
+import com.offapps.off.UI.OfferActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OfferSearchAdapter extends RecyclerView.Adapter<OfferSearchAdapter.OfferViewHolder> {
 
     private Context mContext;
     private List<Offer> mOffers;
+    private List<String> mTags;
 
-    public OfferSearchAdapter(Context context, List<Offer> offers){
+    public OfferSearchAdapter(Context context, List<Offer> offers, List<String> tags){
         mContext = context;
         mOffers = offers;
+        mTags = tags;
     }
 
     @Override
@@ -36,8 +41,18 @@ public class OfferSearchAdapter extends RecyclerView.Adapter<OfferSearchAdapter.
 
     @Override
     public void onBindViewHolder(OfferViewHolder holder, int position) {
-        Offer offer = mOffers.get(position);
+        final Offer offer = mOffers.get(position);
         holder.bindOffer(offer);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), OfferActivity.class);
+                intent.putExtra(ParseConstants.KEY_OBJECT_ID, offer.getObjectId());
+                intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, new ArrayList<>(mTags));
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
