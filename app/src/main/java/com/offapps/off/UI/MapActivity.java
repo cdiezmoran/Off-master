@@ -1,6 +1,5 @@
 package com.offapps.off.UI;
 
-import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.content.IntentSender;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -34,21 +30,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.offapps.off.Adapters.MallListAdapter;
 import com.offapps.off.Data.Mall;
-import com.offapps.off.Misc.OffApplication;
 import com.offapps.off.Misc.ParseConstants;
 import com.offapps.off.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
-import com.pkmmte.view.CircularImageView;
-import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -102,14 +94,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
      * Constants for handling location results
      */
 
-    // Initial offset for calculating the map bounds
-    private static final double OFFSET_CALCULATION_INIT_DIFF = 1.0;
-
-    // Accuracy for calculating the map bounds
-    private static final float OFFSET_CALCULATION_ACCURACY = 0.01f;
-
     // Maximum results returned from a Parse query
-    private static final int MAX_POST_SEARCH_RESULTS = 20;
+    private static final int MAX_MALL_SEARCH_RESULTS = 10;
 
     // Maximum post search radius for map in kilometers
     private static final int MAX_POST_SEARCH_DISTANCE = 100;
@@ -122,12 +108,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
 
     // Fields for the map radius in km
     private float radius;
-    private float lastRadius;
 
     // Fields for helping process map and location changes
-    private final Map<String, Marker> mapMarkers = new HashMap<String, Marker>();
-    private int mostRecentMapUpdate;
-    private boolean hasSetUpInitialLocation;
+    private final Map<String, Marker> mapMarkers = new HashMap<>();
     private String mSelectedMallObjectId;
     private Location mLastLocation;
     private Location mCurrentLocation;
@@ -135,16 +118,15 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     private LocationRequest mLocationRequest;
     private GoogleApiClient mLocationClient;
 
-    private ParseQueryAdapter<Mall> mMallQueryAdapter;
     private SearchView mSearchView;
 
     @InjectView(R.id.tool_bar) Toolbar mToolbar;
+    @InjectView(R.id.mall_listview) ListView mMallListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         radius = 25;
-        lastRadius = radius;
         setContentView(R.layout.activity_map);
         ButterKnife.inject(this);
 
@@ -177,52 +159,37 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
             }
         });
 
-        ParseQueryAdapter.QueryFactory<Mall> factory =
-                new ParseQueryAdapter.QueryFactory<Mall>() {
-                    public ParseQuery<Mall> create() {
-                        Location myLoc = (mCurrentLocation == null) ? mLastLocation : mCurrentLocation;
-                        ParseQuery<Mall> query = Mall.getQuery();
-                        query.orderByDescending(ParseConstants.KEY_LOCATION);
-                        query.whereWithinKilometers(ParseConstants.KEY_LOCATION, geoPointFromLocation(myLoc), radius);
-                        query.setLimit(MAX_POST_SEARCH_RESULTS);
-                        return query;
-                    }
-                };
-
-        mMallQueryAdapter = new ParseQueryAdapter<Mall>(this, factory){
-            @Override
-            public View getItemView(Mall mall, View view, ViewGroup parent) {
-                if (view == null) {
-                    view = View.inflate(getContext(), R.layout.mall_map_item, null);
-                }
-                TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
-                TextView addressTextView = (TextView) view.findViewById(R.id.addressTextView);
-                CircularImageView imageView = (CircularImageView) view.findViewById(R.id.circleImageView);
-                nameTextView.setText(mall.getName());
-                addressTextView.setText(mall.getAddress());
-                Picasso.with(MapActivity.this).load(mall.getImageUri().toString()).into(imageView);
-                return view;
-            }
-        };
-
-        mMallQueryAdapter.setAutoload(false);
-        mMallQueryAdapter.setPaginationEnabled(false);
-
-        ListView mallListView = (ListView) findViewById(R.id.mall_listview);
-        mallListView.setAdapter(mMallQueryAdapter);
-
-        mallListView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Mall item = mMallQueryAdapter.getItem(position);
-                mSelectedMallObjectId = item.getObjectId();
-                Intent intent = new Intent(MapActivity.this, MallActivity.class);
-                intent.putExtra(ParseConstants.KEY_OBJECT_ID, mSelectedMallObjectId);
-                startActivity(intent);
-            }
-        });
+        //getMalls();
 
         isLocationEnabled();
+    }
+
+    public void getMalls() {
+        final Location myLoc = (mCurrentLocation == null) ? mLastLocation : mCurrentLocation;
+        ParseQuery<Mall> query = Mall.getQuery();
+        query.whereWithinKilometers(ParseConstants.KEY_LOCATION, geoPointFromLocation(myLoc), radius);
+        query.setLimit(MAX_MALL_SEARCH_RESULTS);
+        query.findInBackground(new FindCallback<Mall>() {
+            @Override
+            public void done(final List<Mall> list, ParseException e) {
+                if (e == null) {
+                    MallListAdapter adapter = new MallListAdapter(MapActivity.this, list, myLoc);
+
+                    mMallListView.setAdapter(adapter);
+
+                    mMallListView.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            final Mall item = list.get(position);
+                            mSelectedMallObjectId = item.getObjectId();
+                            Intent intent = new Intent(MapActivity.this, MallActivity.class);
+                            intent.putExtra(ParseConstants.KEY_OBJECT_ID, mSelectedMallObjectId);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
@@ -362,7 +329,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
         final ParseGeoPoint myPoint = geoPointFromLocation(myLoc);
         ParseQuery<Mall> mapQuery = Mall.getQuery();
         mapQuery.whereWithinKilometers(ParseConstants.KEY_LOCATION, myPoint, MAX_POST_SEARCH_DISTANCE);
-        mapQuery.orderByDescending(ParseConstants.KEY_LOCATION);
         mapQuery.findInBackground(new FindCallback<Mall>() {
             @Override
             public void done(List<Mall> objects, ParseException e) {
@@ -447,7 +413,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     private void doListQuery() {
         Location myLoc = (mCurrentLocation == null) ? mLastLocation : mCurrentLocation;
         if (myLoc != null) {
-            mMallQueryAdapter.loadObjects();
+            getMalls();
         }
     }
 
