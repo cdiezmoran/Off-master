@@ -49,7 +49,9 @@
                     android:textColor="@android:color/black"
                     android:layout_weight="1"
                     android:drawablePadding="6dp"
-                    android:background="?attr/selectableItemBackground"/>
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableLeft="@drawable/ic_plus_circle_outline_black_18dp"
+                    android:drawableStart="@drawable/ic_plus_circle_outline_black_18dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -133,7 +135,53 @@
                     android:layout_marginLeft="38dp"
                     android:layout_marginStart="38dp"
                     android:layout_height=".25dp"
-                    android:background="@android:color/darker_gray"/>
+                    android:background="@android:color/darker_gray"
+                    android:id="@+id/mall_divider"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mallTextView"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:drawablePadding="16dp"
+                    android:textColor="@android:color/black"
+                    android:background="?attr/selectableItemBackground"
+                    android:visibility="gone"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="38dp"
+                    android:layout_marginStart="38dp"
+                    android:layout_height=".25dp"
+                    android:background="@android:color/darker_gray"
+                    android:id="@+id/floor_divider"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/floorTextView"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:drawablePadding="16dp"
+                    android:textColor="@android:color/black"
+                    android:background="?attr/selectableItemBackground"
+                    android:visibility="gone"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="38dp"
+                    android:layout_marginStart="38dp"
+                    android:layout_height=".25dp"
+                    android:background="@android:color/darker_gray"
+                    android:id="@+id/local_divider"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -145,7 +193,8 @@
                     android:layout_marginBottom="8dp"
                     android:drawablePadding="16dp"
                     android:textColor="@android:color/black"
-                    android:background="?attr/selectableItemBackground"/>
+                    android:background="?attr/selectableItemBackground"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.offapps.off.Misc;
 
 /**
  * Created by Carlos Diez on 22/06/2015.
+ *
  */
 public class ParseConstants {
 
@@ -25,7 +26,6 @@ public class ParseConstants {
     public static final String KEY_OFFER = "offer";
     public static final String KEY_STORE = "store";
     public static final String KEY_USER = "user";
-    public static final String KEY_CURRENT_MALL = "currentMall";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_TAGS = "tags";
     public static final String KEY_FROM_DATE = "fromDate";
@@ -47,4 +47,5 @@ public class ParseConstants {
     public static final String KEY_FLOOR_NUMBER = "floorNumber";
     public static final String KEY_CATEGORY = "category";
     public static final String KEY_FOLLOWERS = "followers";
+    public static final String KEY_LOCAL = "local";
 }

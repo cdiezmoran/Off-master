@@ -76,7 +76,9 @@ public class MallListAdapter extends BaseAdapter {
         mallLocation.setLatitude(mall.getParseGeoPoint(ParseConstants.KEY_LOCATION).getLatitude());
         mallLocation.setLongitude(mall.getParseGeoPoint(ParseConstants.KEY_LOCATION).getLongitude());
 
-        String locationString = mLocation.distanceTo(mallLocation)/1000 + " KM from your location.";
+        int distanceInKm = Math.round(mLocation.distanceTo(mallLocation)/1000);
+
+        String locationString =  distanceInKm + " KM from your location.";
         holder.distanceTextView.setText(locationString);
 
         return convertView;

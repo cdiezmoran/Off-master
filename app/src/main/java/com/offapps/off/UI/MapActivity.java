@@ -97,7 +97,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     // Maximum results returned from a Parse query
     private static final int MAX_MALL_SEARCH_RESULTS = 10;
 
-    // Maximum post search radius for map in kilometers
+    // Maximum post search mRadius for map in kilometers
     private static final int MAX_POST_SEARCH_DISTANCE = 100;
 
     /*
@@ -107,10 +107,10 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     private SupportMapFragment mapFragment;
 
     // Fields for the map radius in km
-    private float radius;
+    private float mRadius;
 
     // Fields for helping process map and location changes
-    private final Map<String, Marker> mapMarkers = new HashMap<>();
+    private final Map<String, Marker> mMapMarkers = new HashMap<>();
     private String mSelectedMallObjectId;
     private Location mLastLocation;
     private Location mCurrentLocation;
@@ -126,7 +126,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        radius = 25;
+        mRadius = 25;
         setContentView(R.layout.activity_map);
         ButterKnife.inject(this);
 
@@ -159,15 +159,13 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
             }
         });
 
-        //getMalls();
-
         isLocationEnabled();
     }
 
     public void getMalls() {
         final Location myLoc = (mCurrentLocation == null) ? mLastLocation : mCurrentLocation;
         ParseQuery<Mall> query = Mall.getQuery();
-        query.whereWithinKilometers(ParseConstants.KEY_LOCATION, geoPointFromLocation(myLoc), radius);
+        query.whereWithinKilometers(ParseConstants.KEY_LOCATION, geoPointFromLocation(myLoc), mRadius);
         query.setLimit(MAX_MALL_SEARCH_RESULTS);
         query.findInBackground(new FindCallback<Mall>() {
             @Override
@@ -251,9 +249,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -336,11 +332,11 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
                 Set<String> toKeep = new HashSet<>();
                 for (Mall mall : objects) {
                     toKeep.add(mall.getObjectId());
-                    Marker oldMarker = mapMarkers.get(mall.getObjectId());
+                    Marker oldMarker = mMapMarkers.get(mall.getObjectId());
                     MarkerOptions markerOpts =
                             new MarkerOptions().position(new LatLng(mall.getLocation().getLatitude(), mall
                                     .getLocation().getLongitude()));
-                    if (mall.getLocation().distanceInKilometersTo(myPoint) > radius) {
+                    if (mall.getLocation().distanceInKilometersTo(myPoint) > mRadius) {
                         // Set up an out-of-range marker
                         if (oldMarker != null) {
                             if (oldMarker.getSnippet() == null) {
@@ -369,7 +365,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
                                                 BitmapDescriptorFactory.HUE_GREEN));
                     }
                     Marker marker = mapFragment.getMap().addMarker(markerOpts);
-                    mapMarkers.put(mall.getObjectId(), marker);
+                    mMapMarkers.put(mall.getObjectId(), marker);
                     if (mall.getObjectId().equals(mSelectedMallObjectId)) {
                         marker.showInfoWindow();
                         mSelectedMallObjectId = null;
@@ -400,12 +396,12 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
    * Helper method to clean up old markers
    */
     private void cleanUpMarkers(Set<String> markersToKeep) {
-        for (String objId : new HashSet<>(mapMarkers.keySet())) {
+        for (String objId : new HashSet<>(mMapMarkers.keySet())) {
             if (!markersToKeep.contains(objId)) {
-                Marker marker = mapMarkers.get(objId);
+                Marker marker = mMapMarkers.get(objId);
                 marker.remove();
-                mapMarkers.get(objId).remove();
-                mapMarkers.remove(objId);
+                mMapMarkers.get(objId).remove();
+                mMapMarkers.remove(objId);
             }
         }
     }

@@ -9,7 +9,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 /**
- * Created by carlosdiez on 10/3/15.
+ * Created by Carlos Diez on 10/3/15.
+ *
  */
 @ParseClassName(ParseConstants.TABLE_MALL_STORES)
 public class Mall_Store extends ParseObject {
@@ -28,6 +29,14 @@ public class Mall_Store extends ParseObject {
 
     public void setStore(Store store) {
         put(ParseConstants.KEY_STORE, store);
+    }
+
+    public String getLocal() {
+        return getString(ParseConstants.KEY_LOCAL);
+    }
+
+    public void setLocal(String local) {
+        put(ParseConstants.KEY_LOCAL, local);
     }
 
     public Floor getFloor() {

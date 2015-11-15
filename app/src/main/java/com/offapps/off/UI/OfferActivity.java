@@ -3,7 +3,6 @@ package com.offapps.off.UI;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,7 +60,7 @@ public class OfferActivity extends AppCompatActivity {
     @InjectView(R.id.storeNameTextView) TextView mStoreNameTextView;
     @InjectView(R.id.storeImageView) CircularImageView mStoreImageView;
     @InjectView(R.id.offerTitleTextView) TextView mOfferTitleTextView;
-    @InjectView(R.id.floatingHeart) FloatingActionButton mFloatingHeart;
+    @InjectView(R.id.heartImageButton) ImageButton mHeartImageButton;
     @InjectView(R.id.commentEditText) EditText mCommentEditText;
     @InjectView(R.id.postCommentImageButton) ImageButton mPostCommentImageButton;
     @InjectView(R.id.characterCountTextView) TextView mCharacterCountTextView;
@@ -70,6 +70,7 @@ public class OfferActivity extends AppCompatActivity {
     @InjectView(R.id.likeCountTextView) TextView mLikeCountTextView;
     @InjectView(R.id.progress_view) CircularProgressView mCircularProgressView;
     @InjectView(R.id.scrollview) NestedScrollView mNestedScrollView;
+    @InjectView(R.id.linearLayoutThird) LinearLayout mDatesLinearLayout;
 
     private Class<?> mParentClass;
     private String mMallObjectId;
@@ -85,6 +86,7 @@ public class OfferActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offer);
         ButterKnife.inject(this);
+        StoreActivity.parents.add(getClass());
 
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_36dp);
@@ -218,9 +220,9 @@ public class OfferActivity extends AppCompatActivity {
                 setLikeCountTextView(likeCount);
 
                 if (mLike != null)
-                    mFloatingHeart.setImageResource(R.drawable.ic_heart_full);
+                    mHeartImageButton.setImageResource(R.drawable.ic_heart_full);
                 else
-                    mFloatingHeart.setImageResource(R.drawable.ic_heart_border_white);
+                    mHeartImageButton.setImageResource(R.drawable.ic_heart_border);
             }
         });
     }
@@ -307,12 +309,12 @@ public class OfferActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @OnClick(R.id.floatingHeart)
+    @OnClick(R.id.heartImageButton)
     public void onClickHeart() {
         int likeCount = mOffer.getLikeCount();
-        mFloatingHeart.setEnabled(false);
+        mHeartImageButton.setEnabled(false);
         if (mLike != null) {
-            mFloatingHeart.setImageResource(R.drawable.ic_heart_border_white);
+            mHeartImageButton.setImageResource(R.drawable.ic_heart_border);
 
             likeCount -= 1;
             mOffer.setLikeCount(likeCount);
@@ -327,7 +329,7 @@ public class OfferActivity extends AppCompatActivity {
                             @Override
                             public void done(ParseException e) {
                                 if (e == null)
-                                    mFloatingHeart.setEnabled(true);
+                                    mHeartImageButton.setEnabled(true);
                             }
                         });
                 }
@@ -336,7 +338,7 @@ public class OfferActivity extends AppCompatActivity {
 
         }
         else {
-            mFloatingHeart.setImageResource(R.drawable.ic_heart_full);
+            mHeartImageButton.setImageResource(R.drawable.ic_heart_full);
 
             mLike = new Like();
             mLike.setOffer(mOffer);
@@ -355,7 +357,7 @@ public class OfferActivity extends AppCompatActivity {
                             @Override
                             public void done(ParseException e) {
                                 if (e == null)
-                                    mFloatingHeart.setEnabled(true);
+                                    mHeartImageButton.setEnabled(true);
                             }
                         });
                 }
@@ -374,5 +376,15 @@ public class OfferActivity extends AppCompatActivity {
         intent.putExtra(ParseConstants.KEY_OBJECT_ID, mStoreId);
         intent.putExtra("offerId", mOfferId);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.calendarImageButton)
+    public void onClickCalendarImageButton() {
+        if (mDatesLinearLayout.getVisibility() == View.GONE) {
+            mDatesLinearLayout.setVisibility(View.VISIBLE);
+        }
+        else {
+            mDatesLinearLayout.setVisibility(View.GONE);
+        }
     }
 }

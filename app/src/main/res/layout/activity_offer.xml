@@ -42,18 +42,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/scrollview"
-            android:text="@string/hello_world"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -120,8 +115,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:textAppearanceSmall"
                         android:id="@+id/likeCountTextView"
-                        android:layout_weight=".75"
-                        android:text="Likes: "/>
+                        android:layout_weight=".75"/>
                 </LinearLayout>
 
                 <View
@@ -136,9 +130,60 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/divider"
+                    android:id="@+id/buttonsLinearLayout"
                     android:orientation="horizontal"
-                    android:id="@+id/linearLayoutThird">
+                    android:layout_below="@+id/divider">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_heart_border"
+                        android:layout_weight=".25"
+                        android:id="@+id/heartImageButton"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width=".25dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_weight=".0005"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_event_black_24dp"
+                        android:layout_weight=".25"
+                        android:id="@+id/calendarImageButton"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width=".25dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_weight=".0005"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_share_black_24dp"
+                        android:layout_weight=".25"
+                        android:id="@+id/shareImageButton"
+                        android:background="@android:color/transparent"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/buttonsLinearLayout"
+                    android:orientation="horizontal"
+                    android:id="@+id/linearLayoutThird"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -263,21 +308,6 @@
             android:layout_height="72dp"
             app:cpv_indeterminate="true"
             app:cpv_color="@color/ColorPrimary"
-            android:layout_gravity="center|bottom"/>
-
-    </FrameLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingHeart"
-        app:layout_anchor="@id/app_bar_layout"
-        app:layout_anchorGravity="bottom|right|end"
-        app:elevation="6dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_heart_border_white"
-        app:rippleColor="@color/ColorPrimaryDark"
-        app:backgroundTint="#FFD740"
-        android:layout_margin="2dp"
-        app:pressedTranslationZ="12dp"/>
+            android:layout_gravity="center"/>
 
 </android.support.design.widget.CoordinatorLayout>

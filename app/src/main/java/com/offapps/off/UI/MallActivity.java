@@ -87,7 +87,7 @@ public class MallActivity extends AppCompatActivity {
 
         if (!parents.empty()) {
             mParentClass = parents.pop();
-            if (mParentClass == SearchResultsActivity.class) {
+            if (mParentClass == SearchResultsActivity.class|| mParentClass == SearchActivity.class) {
                 mTags = intent.getStringArrayListExtra(ParseConstants.KEY_TAGS);
             }
         }
@@ -199,10 +199,11 @@ public class MallActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            if (mParentClass == SearchActivity.class){
+            if (mParentClass == SearchResultsActivity.class || mParentClass == SearchActivity.class){
                 Intent intent = new Intent(this, mParentClass);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, mTags);
+                intent.putExtra("extra", "stores");
                 startActivity(intent);
             }
             else {

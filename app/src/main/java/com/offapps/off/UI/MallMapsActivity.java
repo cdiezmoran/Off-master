@@ -44,6 +44,7 @@ public class MallMapsActivity extends AppCompatActivity {
         StoreActivity.parents.push(getClass());
 
         setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_36dp);
 
         Intent intent = getIntent();
         mMallId = intent.getStringExtra(ParseConstants.KEY_OBJECT_ID);

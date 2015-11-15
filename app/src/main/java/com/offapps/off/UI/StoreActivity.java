@@ -15,7 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
+import com.offapps.off.Data.Floor;
 import com.offapps.off.Data.Follow;
+import com.offapps.off.Data.Mall;
+import com.offapps.off.Data.Mall_Store;
 import com.offapps.off.Data.Offer;
 import com.offapps.off.Data.Store;
 import com.offapps.off.Misc.ParseConstants;
@@ -48,6 +51,11 @@ public class StoreActivity extends AppCompatActivity {
     @InjectView(R.id.facebookTextView) TextView mFacebookTextView;
     @InjectView(R.id.webPageTextView) TextView mWebPageTextView;
     @InjectView(R.id.followTextView) TextView mFollowTextView;
+    @InjectView(R.id.mallTextView) TextView mMallTextView;
+    @InjectView(R.id.floorTextView) TextView mFloorTextView;
+    @InjectView(R.id.mall_divider) View mMallDivider;
+    @InjectView(R.id.floor_divider) View mFloorDivider;
+    @InjectView(R.id.local_divider) View mLocalDivider;
     @InjectView(R.id.tool_bar) Toolbar mToolbar;
 
     public static Stack<Class<?>> parents = new Stack<>();
@@ -143,6 +151,14 @@ public class StoreActivity extends AppCompatActivity {
         numOffersDrawable.setColorFilter(ContextCompat.getColor(this, R.color.ColorPrimary), PorterDuff.Mode.SRC_ATOP);
         mNumOffersTextView.setCompoundDrawablesWithIntrinsicBounds(numOffersDrawable, null, null, null);
 
+        final Drawable mallDrawable = ContextCompat.getDrawable(this, R.drawable.ic_domain_black_18dp);
+        mallDrawable.setColorFilter(ContextCompat.getColor(this, R.color.ColorPrimary), PorterDuff.Mode.SRC_ATOP);
+        mMallTextView.setCompoundDrawablesWithIntrinsicBounds(mallDrawable, null, null, null);
+
+        final Drawable floorDrawable = ContextCompat.getDrawable(this, R.drawable.ic_escalator_black_18dp);
+        floorDrawable.setColorFilter(ContextCompat.getColor(this, R.color.ColorPrimary), PorterDuff.Mode.SRC_ATOP);
+        mFloorTextView.setCompoundDrawablesWithIntrinsicBounds(floorDrawable, null, null, null);
+
         final Drawable localDrawable = ContextCompat.getDrawable(this, R.drawable.ic_store_white_24dp);
         localDrawable.setColorFilter(ContextCompat.getColor(this, R.color.ColorPrimary), PorterDuff.Mode.SRC_ATOP);
         mLocalTextView.setCompoundDrawablesWithIntrinsicBounds(localDrawable, null, null, null);
@@ -192,8 +208,7 @@ public class StoreActivity extends AppCompatActivity {
                         setFollowingTextView();
                     else
                         setNotFollowingTextView();
-                }
-                else {
+                } else {
                     //Show error dialog
                 }
             }
@@ -231,10 +246,58 @@ public class StoreActivity extends AppCompatActivity {
         mFacebookTextView.setText(mStore.getFacebookUser());
         mWebPageTextView.setText(mStore.getWebPage());
 
-        mLocalTextView.setVisibility(View.GONE);
+        if (mParentClass == MallMapsActivity.class)
+            doMallQuery();
+        else
+            setMallViewsVisibility(View.GONE);
+
 
         Picasso.with(this).load(mStore.getImageString()).into(mProfileImage);
         Picasso.with(this).load(mStore.getHeaderString()).into(mHeaderImageView);
+    }
+
+    public void doMallQuery() {
+        ParseQuery<Mall> query = Mall.getQuery();
+        query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, mMallId);
+        query.getFirstInBackground(new GetCallback<Mall>() {
+            @Override
+            public void done(Mall mall, ParseException e) {
+                if (e == null)
+                    doMallStoreQuery(mall);
+            }
+        });
+    }
+
+    public void doMallStoreQuery(final Mall mall){
+        ParseQuery<Mall_Store> query = Mall_Store.getQuery();
+        query.whereEqualTo(ParseConstants.KEY_STORE, mStore);
+        query.whereEqualTo(ParseConstants.KEY_MALL, mall);
+        query.getFirstInBackground(new GetCallback<Mall_Store>() {
+            @Override
+            public void done(Mall_Store object, ParseException e) {
+                if (e == null) {
+                    setMallViewsVisibility(View.VISIBLE);
+                    mLocalTextView.setText(object.getLocal());
+                    mMallTextView.setText(mall.getName());
+                    try {
+                        Floor floor = object.getFloor().fetchIfNeeded();
+                        mFloorTextView.setText(floor.getName());
+                    } catch(ParseException e1) {
+
+                    }
+                }
+            }
+        });
+    }
+
+    public void setMallViewsVisibility(int visibility) {
+        mMallDivider.setVisibility(visibility);
+        mFloorDivider.setVisibility(visibility);
+        mLocalDivider.setVisibility(visibility);
+
+        mMallTextView.setVisibility(visibility);
+        mFloorTextView.setVisibility(visibility);
+        mLocalTextView.setVisibility(visibility);
     }
 
     @OnClick(R.id.offersTextView)
