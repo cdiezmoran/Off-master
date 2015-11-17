@@ -5,4 +5,6 @@
     <color name="TabScrollColor">#FFC107</color>
     <color name="TwitterColor">#4099FF</color>
     <color name="FacebookColor">#3b5998</color>
+    <color name="WhatsappColor">#43d854</color>
+    <color name="GoogleplusColor">#dc4e41</color>
 </resources>

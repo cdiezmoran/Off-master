@@ -2,12 +2,21 @@ package com.offapps.off.UI;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.widget.ActionBarContextView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +30,7 @@ import android.widget.Toast;
 import com.bluejamesbond.text.DocumentView;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.offapps.off.Adapters.CommentsListAdapter;
+import com.offapps.off.Adapters.ShareGridAdapter;
 import com.offapps.off.Data.Comment;
 import com.offapps.off.Data.Like;
 import com.offapps.off.Data.Offer;
@@ -75,8 +85,12 @@ public class OfferActivity extends AppCompatActivity {
     private Class<?> mParentClass;
     private String mMallObjectId;
     private Offer mOffer;
+    private Store mStore;
     private Like mLike;
     private ArrayList<String> mTags;
+
+    private List<String> mShareNames;
+    private List<Drawable> mShareImageDrawables;
 
     private String mOfferId;
     private String mStoreId;
@@ -97,7 +111,15 @@ public class OfferActivity extends AppCompatActivity {
         mCircularProgressView.startAnimation();
 
         Intent intent = getIntent();
-        mOfferId = intent.getStringExtra(ParseConstants.KEY_OBJECT_ID);
+        Uri data = intent.getData();
+
+        if (data != null) {
+            List<String> parameters = data.getPathSegments();
+            mOfferId = parameters.get(0);
+        }
+        else {
+            mOfferId = intent.getStringExtra(ParseConstants.KEY_OBJECT_ID);
+        }
 
         if (!parents.empty()) {
             mParentClass = parents.pop();
@@ -161,10 +183,10 @@ public class OfferActivity extends AppCompatActivity {
                 Picasso.with(OfferActivity.this).load(mOffer.getImageString()).into(mItemImageView);
 
                 try {
-                    Store store = mOffer.getParseObject(ParseConstants.KEY_STORE).fetchIfNeeded();
-                    mStoreNameTextView.setText(store.getString(ParseConstants.KEY_NAME));
-                    mStoreId = store.getObjectId();
-                    Picasso.with(OfferActivity.this).load(store.getImageString()).into(mStoreImageView);
+                    mStore = mOffer.getParseObject(ParseConstants.KEY_STORE).fetchIfNeeded();
+                    mStoreNameTextView.setText(mStore.getString(ParseConstants.KEY_NAME));
+                    mStoreId = mStore.getObjectId();
+                    Picasso.with(OfferActivity.this).load(mStore.getImageString()).into(mStoreImageView);
                 } catch (ParseException e1) {
                     //Alert dialogue
                 }
@@ -386,5 +408,52 @@ public class OfferActivity extends AppCompatActivity {
         else {
             mDatesLinearLayout.setVisibility(View.GONE);
         }
+    }
+
+    @OnClick(R.id.shareImageButton)
+    public void onClickShareImageButton() {
+        View gridShareView = LayoutInflater.from(this).inflate(R.layout.share_recycler_view, null);
+
+        setShareItems();
+
+        RecyclerView recyclerView = (RecyclerView) gridShareView.findViewById(R.id.shareRecyclerView);
+
+        recyclerView.setHasFixedSize(true);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        recyclerView.setLayoutManager(layoutManager);
+
+        ShareGridAdapter adapter = new ShareGridAdapter(this, mShareNames, mShareImageDrawables, mOfferId, mStore.getName());
+        recyclerView.setAdapter(adapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Share using...");
+        builder.setView(gridShareView);
+        builder.setPositiveButton("CANCEL", null);
+        builder.show();
+    }
+
+    private void setShareItems(){
+        mShareNames = new ArrayList<>();
+        mShareImageDrawables = new ArrayList<>();
+
+        mShareNames.add("Facebook");
+        final Drawable facebookDrawable = ContextCompat.getDrawable(this, R.drawable.ic_facebook_black_48dp);
+        mShareImageDrawables.add(facebookDrawable);
+
+        mShareNames.add("Twitter");
+        final Drawable twitterDrawable = ContextCompat.getDrawable(this, R.drawable.ic_twitter_black_48dp);
+        mShareImageDrawables.add(twitterDrawable);
+
+        mShareNames.add("Whatsapp");
+        final Drawable whatsappDrawable = ContextCompat.getDrawable(this, R.drawable.ic_whatsapp_black_48dp);
+        mShareImageDrawables.add(whatsappDrawable);
+
+        mShareNames.add("Gmail");
+        final Drawable gmailDrawable = ContextCompat.getDrawable(this, R.drawable.ic_gmail_black_48dp);
+        mShareImageDrawables.add(gmailDrawable);
+
+        mShareNames.add("Google Plus");
+        final Drawable gplusDrawable = ContextCompat.getDrawable(this, R.drawable.ic_google_plus_black_48dp);
+        mShareImageDrawables.add(gplusDrawable);
     }
 }
