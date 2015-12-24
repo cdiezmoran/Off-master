@@ -3,6 +3,7 @@ package com.offapps.off.UI;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
 
@@ -34,8 +35,11 @@ public class SignUpActivity extends Activity {
         String email = mEmail.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()){
-            AlertDialogFragment dialog = new AlertDialogFragment();
-            dialog.show(getFragmentManager(), "error_dialog");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Something went wrong!");
+            builder.setPositiveButton("OK", null);
+            builder.setMessage("Please make sure that all fields are filled.");
+            builder.show();
         }
         else {
             ParseUser newUser = new ParseUser();
@@ -52,17 +56,15 @@ public class SignUpActivity extends Activity {
                         startActivity(intent);
                     }
                     else{
-                        AlertDialogFragment exceptionDialog = new AlertDialogFragment();
-                        exceptionDialog.show(getFragmentManager(), "exception_dialog");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this, R.style.AppCompatAlertDialogStyle);
+                        builder.setTitle("Something went wrong!");
+                        builder.setPositiveButton("OK", null);
+                        builder.setMessage("There was an error connecting to the server! Please try again later.");
+                        builder.show();
                     }
                 }
             };
             newUser.signUpInBackground(callback);
         }
-    }
-    @OnClick(R.id.loginTextView)
-    public void onClick(){
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
     }
 }

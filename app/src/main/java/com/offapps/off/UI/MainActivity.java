@@ -2,7 +2,6 @@ package com.offapps.off.UI;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -14,14 +13,12 @@ import android.view.View;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.offapps.off.Adapters.OfferAdapter;
 import com.offapps.off.Data.Like;
-import com.offapps.off.Data.Mall;
 import com.offapps.off.Data.Offer;
 import com.offapps.off.Misc.OffApplication;
 import com.offapps.off.Misc.ParseConstants;
 import com.offapps.off.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -48,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         if (ParseUser.getCurrentUser() == null) {
-            navigateToSignUp();
+            navigateToLogIn();
         }
         else {
             OfferActivity.parents.push(getClass());
@@ -109,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void navigateToSignUp() {
-        Intent intent = new Intent(this, SignUpActivity.class);
+    private void navigateToLogIn() {
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -129,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_logout) {
             ParseUser.logOut();
-            navigateToSignUp();
+            navigateToLogIn();
         }
         else if(id == R.id.action_search){
             Intent intent = new Intent(this, SearchActivity.class);

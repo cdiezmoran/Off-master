@@ -9,6 +9,7 @@ import android.widget.EditText;
 import com.offapps.off.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 
 import butterknife.ButterKnife;
@@ -36,15 +37,31 @@ public class LoginActivity extends Activity {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
-                if (parseUser != null){
+                if (parseUser != null) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                }
-                else{
+                } else {
                     AlertDialogFragment dialog = new AlertDialogFragment();
                     dialog.show(getFragmentManager(), "login_error_dialog");
+                }
+            }
+        });
+    }
+
+    @OnClick(R.id.twitterLogIn)
+    public void onTwitterClick(){
+        ParseTwitterUtils.logIn(this, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e == null){
+                    if (user != null){
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
                 }
             }
         });

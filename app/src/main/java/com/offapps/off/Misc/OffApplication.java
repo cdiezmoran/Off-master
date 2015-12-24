@@ -12,9 +12,11 @@ import com.offapps.off.Data.Offer;
 import com.offapps.off.Data.Store;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseTwitterUtils;
 
 /**
  * Created by Carlos Diez on 12/06/2015.
+ *
  */
 public class OffApplication extends Application{
 
@@ -36,6 +38,7 @@ public class OffApplication extends Application{
         ParseObject.registerSubclass(Floor.class);
         ParseObject.registerSubclass(Mall_Store.class);
         Parse.initialize(this, "Uqc86Bki5t3xKiFdT6ssSCvF8S9oi5VBVDrP5YaF", "0QHBVcYQDlRHSwtWbEcn2gz4RGSrgc9kZqjokYXk");
+        ParseTwitterUtils.initialize("pXZi6SOsWRX6rWWkl4pcKfz9f", "HQsS81TC61BiOmPas1U0perEw3jPgWHxe20731o7N6puO57YGY");
 
         configHelper = new ConfigHelper();
         configHelper.fetchConfigIfNeeded();

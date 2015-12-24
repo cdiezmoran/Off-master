@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -53,7 +52,6 @@ public class MallActivity extends AppCompatActivity {
     @InjectView(R.id.nameTextView) TextView mNameTextView;
     @InjectView(R.id.tool_bar) Toolbar mToolbar;
     @InjectView(R.id.recycler_view) RecyclerView mRecyclerView;
-    @InjectView(R.id.nested_scroll) NestedScrollView mNestedScrollView;
 
     public static Stack<Class<?>> parents = new Stack<>();
     private Class<?> mParentClass;
