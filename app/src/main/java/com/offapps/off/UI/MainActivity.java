@@ -44,21 +44,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        if (ParseUser.getCurrentUser() == null) {
-            navigateToLogIn();
-        }
-        else {
-            OfferActivity.parents.push(getClass());
+        OfferActivity.parents.push(getClass());
 
-            mCircularProgressView.startAnimation();
+        mCircularProgressView.startAnimation();
 
-            mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(true);
 
-            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-            layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-            mRecyclerView.setLayoutManager(layoutManager);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        mRecyclerView.setLayoutManager(layoutManager);
 
-            setSupportActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
+
+        if (ParseUser.getCurrentUser() != null) {
             doLikeQuery();
         }
     }

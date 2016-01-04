@@ -72,8 +72,7 @@ public class SearchActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_36dp);
 
-        String[] categoriesList = {"Hombres", "Mujeres", "Camisas", "Zapatos", "Vestidos", "Niños",
-                "Popular", "Trending"};
+        String[] categoriesList = {"Mujeres", "Hombres"};
 
         CategoriesListAdapter adapter = new CategoriesListAdapter(this, categoriesList);
         mListView.setEmptyView(findViewById(android.R.id.empty));
@@ -115,7 +114,7 @@ public class SearchActivity extends AppCompatActivity {
             String query = "";
             for (String tag : tags)
                 query += tag + " ";
-            mSearchView.setQuery(query, true);
+            mSearchView.setQuery(query.substring(0, query.length()-1), true);
         }
 
         mSearchView.setIconified(false);
@@ -138,6 +137,8 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                //TODO
+                //Suggestions while writing on search field
                 return false;
             }
         });

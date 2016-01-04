@@ -48,4 +48,6 @@ public class ParseConstants {
     public static final String KEY_CATEGORY = "category";
     public static final String KEY_FOLLOWERS = "followers";
     public static final String KEY_LOCAL = "local";
+    public static final String KEY_EMAIL = "email";
+    public static final String KEY_PASSWORD = "password";
 }

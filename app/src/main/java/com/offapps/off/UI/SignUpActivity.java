@@ -41,11 +41,21 @@ public class SignUpActivity extends Activity {
             builder.setMessage("Please make sure that all fields are filled.");
             builder.show();
         }
+        else if (!isEmailValid(email)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Invalid email!");
+            builder.setPositiveButton("OK", null);
+            builder.setMessage("Please make sure that your email is correct.");
+            builder.show();
+        }
         else {
             ParseUser newUser = new ParseUser();
             newUser.setEmail(email);
             newUser.setPassword(password);
-            newUser.setUsername(email);
+
+            String emailParts[] = email.split("@"); //Split the string at the @ to get username
+            newUser.setUsername(emailParts[0]);
+
             SignUpCallback callback = new SignUpCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -66,5 +76,15 @@ public class SignUpActivity extends Activity {
             };
             newUser.signUpInBackground(callback);
         }
+    }
+
+    private boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    @OnClick(R.id.goBackTextView)
+    public void onClickGoBack() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }

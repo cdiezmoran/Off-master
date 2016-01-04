@@ -1,12 +1,16 @@
 package com.offapps.off.UI;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,13 +24,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -57,16 +62,13 @@ import butterknife.InjectView;
 * &
 * https://github.com/ParsePlatform/AnyWall/blob/master/AnyWall-android/Anywall/src/com/parse/anywall/MainActivity.java
 *
-* Created by:
-* mrbm, caabernathy & mrkane27 (Unkown date)
-*
 * Edited by:
-* carlosdiez on 8/26/15
+* Carlos Diez on 8/26/15
 */
 
 public class MapActivity extends AppCompatActivity implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -150,12 +152,21 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
                 .build();
 
         mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map_fragment);
-        // Enable the current location "blue dot"
-        mapFragment.getMap().setMyLocationEnabled(true);
-        // Set up the camera change handler
-        mapFragment.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            public void onCameraChange(CameraPosition position) {
-                doMapQuery();
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                // Enable the current location "blue dot"
+                if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    //ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, );
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
+                // Set up the camera change handler
+                googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                    public void onCameraChange(CameraPosition position) {
+                        doMapQuery();
+                    }
+                });
             }
         });
 
@@ -247,8 +258,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
+        //int id = item.getItemId();
 
 
         return super.onOptionsItemSelected(item);
@@ -263,19 +273,25 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     }
 
     private void goToLocationOnMap() {
-        Location myLoc = (mCurrentLocation == null) ? mLastLocation : mCurrentLocation;
+        final Location myLoc = (mCurrentLocation == null) ? mLastLocation : mCurrentLocation;
         if (myLoc != null) {
             //Go to Location
-            mapFragment.getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(myLoc.getLatitude(), myLoc.getLongitude()), 13));
+            mapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(myLoc.getLatitude(), myLoc.getLongitude()), 13));
 
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(myLoc.getLatitude(), myLoc.getLongitude()))      // Sets the center of the map to location user
-                    .zoom(15)                   // Sets the zoom
-                    .bearing(0)                // Sets the orientation of the camera to east
-                    .tilt(0)                   // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
-            mapFragment.getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(new LatLng(myLoc.getLatitude(), myLoc.getLongitude()))      // Sets the center of the map to location user
+                            .zoom(15)                   // Sets the zoom
+                            .bearing(0)                // Sets the orientation of the camera to east
+                            .tilt(0)                   // Sets the tilt of the camera to 30 degrees
+                            .build();                   // Creates a CameraPosition from the builder
+
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }
+            });
         }
     }
 
@@ -300,11 +316,16 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         if (connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
             } catch (IntentSender.SendIntentException e) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+                builder.setTitle("Connection Failed!");
+                builder.setPositiveButton("ACCEPT", null);
+                builder.setMessage("Could not resolve the location connection please try again later.");
+                builder.show();
             }
         } else {
             //showErrorDialog(connectionResult.getErrorCode());
@@ -330,7 +351,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
             public void done(List<Mall> objects, ParseException e) {
                 // Handle the results
                 Set<String> toKeep = new HashSet<>();
-                for (Mall mall : objects) {
+                for (final Mall mall : objects) {
                     toKeep.add(mall.getObjectId());
                     Marker oldMarker = mMapMarkers.get(mall.getObjectId());
                     MarkerOptions markerOpts =
@@ -364,12 +385,18 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
                                         .icon(BitmapDescriptorFactory.defaultMarker(
                                                 BitmapDescriptorFactory.HUE_GREEN));
                     }
-                    Marker marker = mapFragment.getMap().addMarker(markerOpts);
-                    mMapMarkers.put(mall.getObjectId(), marker);
-                    if (mall.getObjectId().equals(mSelectedMallObjectId)) {
-                        marker.showInfoWindow();
-                        mSelectedMallObjectId = null;
-                    }
+                    final MarkerOptions finalMarkerOpts = markerOpts;
+                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            Marker marker = googleMap.addMarker(finalMarkerOpts);
+                            mMapMarkers.put(mall.getObjectId(), marker);
+                            if (mall.getObjectId().equals(mSelectedMallObjectId)) {
+                                marker.showInfoWindow();
+                                mSelectedMallObjectId = null;
+                            }
+                        }
+                    });
                 }
                 cleanUpMarkers(toKeep);
             }
@@ -377,7 +404,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     }
 
     private boolean servicesConnected() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
 
         if (ConnectionResult.SUCCESS == resultCode) {
             return true;
@@ -421,6 +448,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     }
 
     private void startPeriodicUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         LocationServices.FusedLocationApi.requestLocationUpdates(mLocationClient, mLocationRequest, this);
     }
 
@@ -430,6 +460,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
 
     private Location getLocation() {
         if (servicesConnected()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return null;
+            }
             return LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
         } else {
             return null;
@@ -443,17 +476,29 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
 
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {}
+        } catch(Exception ex) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Location services disabled!");
+            builder.setPositiveButton("ACCEPT", null);
+            builder.setMessage("Please make sure that your location services are enabled.");
+            builder.show();
+        }
 
         try {
             network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ex) {}
+        } catch(Exception ex) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Unable to connect!");
+            builder.setPositiveButton("ACCEPT", null);
+            builder.setMessage("Please make sure that you are connected to a working network.");
+            builder.show();
+        }
 
         if(!gps_enabled && !network_enabled) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
             builder.setTitle("Location services disabled!");
             builder.setPositiveButton("ACCEPT", null);
-            builder.setMessage("Please enable your location services.");
+            builder.setMessage("Please make sure that your location services are enabled.");
             builder.show();
         }
     }
