@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/popular"
+            android:icon="@drawable/ic_crown_black_48dp"
+            android:title="Popular" />
+
+        <item
+            android:id="@+id/trending"
+            android:icon="@drawable/ic_fire_black_48dp"
+            android:title="Trending" />
+
+        <item
+            android:id="@+id/newest"
+            android:icon="@drawable/ic_alarm_black_48dp"
+            android:title="Newest" />
+
+        <item
+            android:id="@+id/likes"
+            android:icon="@drawable/ic_heart_black_48dp"
+            android:title="Likes" />
+
+        <item
+            android:id="@+id/following"
+            android:icon="@drawable/ic_checkbox_marked_circle_outline_black_18dp"
+            android:title="Following" />
+
+    </group>
+</menu>

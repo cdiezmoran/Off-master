@@ -1,124 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.offapps.off" >
+<manifest package="com.offapps.off"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="com.offapps.off.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="com.offapps.off.permission.MAPS_RECEIVE"/>
 
     <application
         android:name=".Misc.OffApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBlsixfbw7jbDSzH41sF2HTq46BA1IzI0c" />
+            android:value="AIzaSyBlsixfbw7jbDSzH41sF2HTq46BA1IzI0c"/>
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
 
         <activity
             android:name=".UI.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".UI.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:theme="@style/BlankNotificationTheme" >
+            android:theme="@style/BlankNotificationTheme">
         </activity>
         <activity
             android:name=".UI.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/BlankNotificationTheme" >
+            android:theme="@style/BlankNotificationTheme">
         </activity>
         <activity
             android:name=".UI.SearchActivity"
             android:label="@string/title_activity_search"
-            android:parentActivityName=".UI.MainActivity" >
+            android:parentActivityName=".UI.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.MainActivity" />
+                android:value="com.offapps.off.UI.MainActivity"/>
         </activity>
         <activity
             android:name=".UI.MapActivity"
-            android:label="@string/title_activity_map" >
+            android:label="@string/title_activity_map">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.MainActivity" />
+                android:value="com.offapps.off.UI.MainActivity"/>
         </activity>
         <activity
             android:name=".UI.AddOfferActivity"
-            android:label="@string/title_activity_temp_add" >
+            android:label="@string/title_activity_temp_add">
         </activity>
         <activity
             android:name=".UI.OfferActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.MainActivity" />
+                android:value="com.offapps.off.UI.MainActivity"/>
+
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="offapps.com"/>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="offapps.com"
+                    android:scheme="http"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".UI.OffersActivity"
-            android:label="@string/title_activity_mall_offers" >
+            android:label="@string/title_activity_mall_offers">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.MallActivity" />
+                android:value="com.offapps.off.UI.MallActivity"/>
         </activity>
         <activity
             android:name=".UI.CommentsActivity"
             android:label="@string/title_activity_comments"
-            android:parentActivityName=".UI.OfferActivity" >
+            android:parentActivityName=".UI.OfferActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.OfferActivity" />
+                android:value="com.offapps.off.UI.OfferActivity"/>
         </activity>
         <activity
             android:name=".UI.MallActivity"
-            android:label="@string/title_activity_mall" >
+            android:label="@string/title_activity_mall">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.MapActivity" />
+                android:value="com.offapps.off.UI.MapActivity"/>
         </activity>
         <activity
             android:name=".UI.MallMapsActivity"
-            android:label="@string/title_activity_mall" >
+            android:label="@string/title_activity_mall">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.MallActivity" />
+                android:value="com.offapps.off.UI.MallActivity"/>
         </activity>
         <activity
             android:name=".UI.StoreActivity"
             android:label="@string/title_activity_store"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.MallMapsActivity" />
+                android:value="com.offapps.off.UI.MallMapsActivity"/>
         </activity>
         <activity
             android:name=".UI.SearchResultsActivity"
             android:label="@string/title_activity_search_results"
             android:parentActivityName=".UI.SearchActivity"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.offapps.off.UI.SearchActivity" />
+                android:value="com.offapps.off.UI.SearchActivity"/>
+        </activity>
+        <activity
+            android:name=".UI.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".UI.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".UI.EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.offapps.off.UI.ProfileActivity"/>
         </activity>
     </application>
 

@@ -1,9 +1,11 @@
 package com.offapps.off.UI;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -139,6 +141,22 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
     private void comment(){
+        if (ParseUser.getCurrentUser() == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Not signed in!");
+            builder.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(CommentsActivity.this, LoginActivity.class);
+                    CommentsActivity.this.startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("CANCEL", null);
+            builder.setMessage("Please sign in to post a comment.");
+            builder.show();
+            return;
+        }
+
         String text = mCommentEditText.getText().toString().trim();
 
         Comment comment = new Comment();

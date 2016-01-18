@@ -49,5 +49,9 @@ public class ParseConstants {
     public static final String KEY_FOLLOWERS = "followers";
     public static final String KEY_LOCAL = "local";
     public static final String KEY_EMAIL = "email";
-    public static final String KEY_PASSWORD = "password";
+    public static final String KEY_GENDER = "gender";
+    public static final String KEY_BIRTH_DATE = "birthDate";
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_POPULARITY = "popularity";
+    public static final String KEY_AGE = "age";
 }

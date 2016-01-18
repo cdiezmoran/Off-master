@@ -1,6 +1,7 @@
 package com.offapps.off.UI;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -64,7 +65,7 @@ public class OfferActivity extends AppCompatActivity {
 
     @InjectView(R.id.tool_bar) android.support.v7.widget.Toolbar mToolbar;
     @InjectView(R.id.itemImageView) ImageView mItemImageView;
-    @InjectView(R.id.descriptionDocumentView) DocumentView mDescriptionTextView;
+    @InjectView(R.id.descriptionTextView) TextView mDescriptionTextView;
     @InjectView(R.id.storeNameTextView) TextView mStoreNameTextView;
     @InjectView(R.id.storeImageView) CircularImageView mStoreImageView;
     @InjectView(R.id.offerTitleTextView) TextView mOfferTitleTextView;
@@ -286,6 +287,22 @@ public class OfferActivity extends AppCompatActivity {
     }
 
     private void comment(Offer offer){
+        if (ParseUser.getCurrentUser() == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Not signed in!");
+            builder.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(OfferActivity.this, LoginActivity.class);
+                    OfferActivity.this.startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("CANCEL", null);
+            builder.setMessage("Please sign in to post a comment.");
+            builder.show();
+            return;
+        }
+
         String text = mCommentEditText.getText().toString().trim();
 
         final ProgressDialog dialog = new ProgressDialog(this);
@@ -331,6 +348,22 @@ public class OfferActivity extends AppCompatActivity {
 
     @OnClick(R.id.heartImageButton)
     public void onClickHeart() {
+        if (ParseUser.getCurrentUser() == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Not signed in!");
+            builder.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(OfferActivity.this, LoginActivity.class);
+                    OfferActivity.this.startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("CANCEL", null);
+            builder.setMessage("Please sign in to like this offer.");
+            builder.show();
+            return;
+        }
+
         int likeCount = mOffer.getLikeCount();
         mHeartImageButton.setEnabled(false);
         if (mLike != null) {

@@ -7,4 +7,6 @@
     <color name="FacebookColor">#3b5998</color>
     <color name="WhatsappColor">#43d854</color>
     <color name="GoogleplusColor">#dc4e41</color>
+    <color name="RegularBlue">#2196f3</color>
+    <color name="RegularPink">#e91e63</color>
 </resources>

@@ -72,4 +72,9 @@
     <string name="top_offers_title">Top Offers</string>
     <string name="title_activity_search_results">Results</string>
     <string name="username_email_hint">Username or Email</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="birth_date_hint">Birth Date</string>
+    <string name="username_hint">Username</string>
+    <string name="age_hint">Age</string>
 </resources>

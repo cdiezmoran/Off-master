@@ -1,7 +1,9 @@
 package com.offapps.off.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.offapps.off.Data.Like;
 import com.offapps.off.Data.Offer;
 import com.offapps.off.Misc.ParseConstants;
 import com.offapps.off.R;
+import com.offapps.off.UI.LoginActivity;
 import com.offapps.off.UI.MallActivity;
 import com.offapps.off.UI.OfferActivity;
 import com.parse.DeleteCallback;
@@ -78,6 +81,22 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
         mainViewHolder.mHeartImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ParseUser.getCurrentUser() == null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AppCompatAlertDialogStyle);
+                    builder.setTitle("Not signed in!");
+                    builder.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(mContext, LoginActivity.class);
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    builder.setNegativeButton("CANCEL", null);
+                    builder.setMessage("Please sign in to like this offer.");
+                    builder.show();
+                    return;
+                }
+
                 searchForLike(offer);
 
                 int likeCount = offer.getLikeCount();

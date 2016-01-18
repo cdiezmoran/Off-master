@@ -201,7 +201,7 @@ public class MallActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, mParentClass);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putStringArrayListExtra(ParseConstants.KEY_TAGS, mTags);
-                intent.putExtra("extra", "stores");
+                intent.putExtra("extra", "malls");
                 startActivity(intent);
             }
             else {

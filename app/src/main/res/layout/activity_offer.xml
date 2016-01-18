@@ -1,13 +1,13 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                xmlns:ext="http://schemas.android.com/apk/res-auto"
-                tools:context="com.offapps.off.UI.OfferActivity"
-                android:background="@null"
-                android:descendantFocusability="beforeDescendants"
-                android:focusableInTouchMode="true">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.offapps.off.UI.OfferActivity"
+    android:background="@null"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -140,7 +140,7 @@
                         android:src="@drawable/ic_heart_border"
                         android:layout_weight=".25"
                         android:id="@+id/heartImageButton"
-                        android:background="@android:color/transparent"/>
+                        android:background="?attr/selectableItemBackground"/>
 
                     <View
                         android:layout_width=".25dp"
@@ -156,7 +156,7 @@
                         android:src="@drawable/ic_event_black_24dp"
                         android:layout_weight=".25"
                         android:id="@+id/calendarImageButton"
-                        android:background="@android:color/transparent"/>
+                        android:background="?attr/selectableItemBackground"/>
 
                     <View
                         android:layout_width=".25dp"
@@ -172,7 +172,7 @@
                         android:src="@drawable/ic_share_black_24dp"
                         android:layout_weight=".25"
                         android:id="@+id/shareImageButton"
-                        android:background="@android:color/transparent"/>
+                        android:background="?attr/selectableItemBackground"/>
 
                 </LinearLayout>
 
@@ -226,14 +226,13 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="15dp"/>
 
-                <com.bluejamesbond.text.DocumentView
-                    android:id="@+id/descriptionDocumentView"
+                <TextView
+                    android:id="@+id/descriptionTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/divider2"
                     android:textColor="@android:color/black"
-                    ext:documentView_textAlignment="justified"
-                    ext:documentView_textSize="18sp"
+                    android:textSize="18sp"
                     android:background="@android:color/white"
                     android:gravity="center"/>
 
@@ -242,7 +241,7 @@
                     android:layout_height=".25dp"
                     android:background="@android:color/darker_gray"
                     android:id="@+id/divider3"
-                    android:layout_below="@+id/descriptionDocumentView"
+                    android:layout_below="@+id/descriptionTextView"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="15dp"/>
 

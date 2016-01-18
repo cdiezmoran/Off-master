@@ -12,6 +12,7 @@ import java.util.Date;
 
 /**
  * Created by carlosdiez on 8/25/15.
+ *
  */
 @ParseClassName(ParseConstants.CLASS_OFFER)
 public class Offer extends ParseObject {
@@ -91,6 +92,14 @@ public class Offer extends ParseObject {
 
     public void setViewCount(int viewCount) {
         put(ParseConstants.KEY_VIEW_COUNT, viewCount);
+    }
+
+    public int getPopularity() {
+        return getNumber(ParseConstants.KEY_POPULARITY).intValue();
+    }
+
+    public void setPopularity(int popularity) {
+        put(ParseConstants.KEY_POPULARITY, popularity);
     }
 
     public static ParseQuery<Offer> getQuery(){

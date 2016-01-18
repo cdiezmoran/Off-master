@@ -39,5 +39,6 @@
             android:id="@+id/heartImageView"
             android:layout_weight="0.40"
             android:layout_gravity="center"
-            android:src="@drawable/ic_favorite_border_black_24dp"/>
+            android:src="@drawable/ic_favorite_border_black_24dp"
+            android:background="?attr/selectableItemBackground"/>
 </LinearLayout>

@@ -264,7 +264,8 @@ public class AddOfferActivity extends AppCompatActivity{
             public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
                 String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
                 String minuteString = minute < 10 ? "0"+minute : ""+minute;
-                mStartTimeEditText.setText(hourString + ":" + minuteString);
+                String hoursPlusMinutes = hourString + ":" + minuteString;
+                mStartTimeEditText.setText(hoursPlusMinutes);
             }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
 
@@ -282,7 +283,8 @@ public class AddOfferActivity extends AppCompatActivity{
             public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
                 String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
                 String minuteString = minute < 10 ? "0"+minute : ""+minute;
-                mEndTimeEditText.setText(hourString + ":" + minuteString);
+                String hoursPlusMinutes = hourString + ":" + minuteString;
+                mEndTimeEditText.setText(hoursPlusMinutes);
             }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
 

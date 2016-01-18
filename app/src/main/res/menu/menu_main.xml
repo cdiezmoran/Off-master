@@ -3,21 +3,6 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
 
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
-          android:orderInCategory="10"
-          app:showAsAction="never"/>
-
-    <item android:id="@+id/action_logout"
-          android:title="@string/action_logout_title"
-          android:orderInCategory="20"
-          app:showAsAction="never"/>
-
-    <item android:id="@+id/action_add"
-          android:title="@string/add_offer"
-          android:orderInCategory="30"
-          app:showAsAction="never"/>
-
       <item
           android:id="@+id/action_search"
           android:orderInCategory="40"
